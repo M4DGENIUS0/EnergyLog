@@ -1,0 +1,4 @@
+enum UsageInterval {
+  daily,
+  weekly,
+}
