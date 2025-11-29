@@ -3,14 +3,12 @@ class AppUsage {
   final String packageName;
   final int usageTime; // in milliseconds
   final int lastUsed; // timestamp
-  final int launchCount;
 
   AppUsage({
     required this.appName,
     required this.packageName,
     required this.usageTime,
     required this.lastUsed,
-    required this.launchCount,
   });
 
   factory AppUsage.fromMap(Map<String, dynamic> map) {
@@ -19,7 +17,6 @@ class AppUsage {
       packageName: map['packageName'] ?? '',
       usageTime: map['usageTime'] ?? 0,
       lastUsed: map['lastUsed'] ?? 0,
-      launchCount: map['launchCount'] ?? 0,
     );
   }
 
@@ -41,12 +38,11 @@ class AppUsage {
       'packageName': packageName,
       'usageTime': usageTime,
       'lastUsed': lastUsed,
-      'launchCount': launchCount,
     };
   }
 
   @override
   String toString() {
-    return 'AppUsage(appName: $appName, usageTime: ${usageTimeInMinutes.toStringAsFixed(2)} min, launches: $launchCount)';
+    return 'AppUsage(appName: $appName, usageTime: ${usageTimeInMinutes.toStringAsFixed(2)} min)';
   }
 }
