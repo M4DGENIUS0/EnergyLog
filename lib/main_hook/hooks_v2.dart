@@ -150,4 +150,37 @@ class HooksV2 implements HooksV2Interface {
     return defaultAppThemeModeHook;
   }
 
+  @override
+  AvailableNotificationsFormatsHook getAvailableNotificationsFormatsHook() {
+    AvailableNotificationsFormatsHook availableNotifications = () {
+    List<String> availableNotifications = [
+      "battery_percentage",
+      "tempreture",
+      "remaining_time",
+      "watts",
+      "amperes"
+      ];
+    return availableNotifications;
+
+    };
+  return availableNotifications;
+  }
+
+  @override
+  DefaultSelectedNotificationsFormatsHook getDefaultSelectedNotificationsFormatsHook() {
+    DefaultSelectedNotificationsFormatsHook preSelectedNotifications = () {
+      List<String> selectedNotifications = [
+        "battery_percentage",
+        // "tempreture",
+        // "remaining_time",
+        // "watts",
+        // "amperes"
+      ];
+      return selectedNotifications;
+
+    };
+    return preSelectedNotifications;
+  }
+
+
 }

@@ -43,6 +43,8 @@ Future<void> main() async {
     "languageNameAndCode" : hooksV2.getLanguageCodeAndName(),
     "defaultLanguageCode" : hooksV2.getDefaultLanguageHook(),
     "defaultAppThemeModeHook" : hooksV2.getDefaultAppThemeModeHook(),
+    "defaultSelectedNotificationsFormatsHook" : hooksV2.getDefaultSelectedNotificationsFormatsHook(),
+    "availableNotificationsFormatsHook" : hooksV2.getAvailableNotificationsFormatsHook(),
   };
   HooksConfigurations.setHooks(hooksMap);
 

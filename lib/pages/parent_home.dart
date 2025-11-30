@@ -32,8 +32,6 @@ class _ParentHomeState extends State<ParentHome> {
     // loadData();
   }
 
-
-
   final List<Widget> _pages = [
     BatteryScreen(),
     MonitorScreen(),
@@ -43,49 +41,47 @@ class _ParentHomeState extends State<ParentHome> {
 
   @override
   Widget build(BuildContext context) {
-    print("Building Home Screen...");
-
-    return PopScope(
-      canPop: _selectedIndex == 0,
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop && _selectedIndex != 0) {
-          setState(() {
-            _selectedIndex = 0;
-          });
-        }
-      },
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        // drawer: HomeScreenDrawerWidget(
-        //   drawerConfigDataList: drawerConfigList,
-        //   userInfoData: {
-        //     USER_PROFILE_NAME : _userName,
-        //     USER_PROFILE_IMAGE : _userImage,
-        //     USER_ROLE : _userRole,
-        //     USER_LOGGED_IN : isLoggedIn,
-        //   },
-        //   homeScreenDrawerWidgetListener: (bool loginInfo){
-        //     if(mounted){
-        //       setState(() {
-        //         isLoggedIn = loginInfo;
-        //       });
-        //     }
-        //   },
-        // ),
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: _pages,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: HomeScreenUtilities().getSystemUiOverlayStyle(),
+      child: PopScope(
+        canPop: _selectedIndex == 0,
+        onPopInvokedWithResult: (didPop, result) {
+          if (!didPop && _selectedIndex != 0) {
+            setState(() {
+              _selectedIndex = 0;
+            });
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          // drawer: HomeScreenDrawerWidget(
+          //   drawerConfigDataList: drawerConfigList,
+          //   userInfoData: {
+          //     USER_PROFILE_NAME : _userName,
+          //     USER_PROFILE_IMAGE : _userImage,
+          //     USER_ROLE : _userRole,
+          //     USER_LOGGED_IN : isLoggedIn,
+          //   },
+          //   homeScreenDrawerWidgetListener: (bool loginInfo){
+          //     if(mounted){
+          //       setState(() {
+          //         isLoggedIn = loginInfo;
+          //       });
+          //     }
+          //   },
+          // ),
+          body: IndexedStack(index: _selectedIndex, children: _pages),
+          bottomNavigationBar: bottomNavigationBar(),
         ),
-        bottomNavigationBar: bottomNavigationBar(),
       ),
     );
   }
 
-  PreferredSizeWidget getAppBarWidget(){
+  PreferredSizeWidget getAppBarWidget() {
     return AppBarWidget(
-
       appBarTitle: APP_NAME,
-      backgroundColor: AppThemePreferences().appTheme.sliverAppBarBackgroundColor,
+      backgroundColor:
+          AppThemePreferences().appTheme.sliverAppBarBackgroundColor,
       elevation: 5,
     );
   }
@@ -100,16 +96,16 @@ class _ParentHomeState extends State<ParentHome> {
           CustomScrollView(
             slivers: <Widget>[
               SliverList(
-                delegate: SliverChildBuilderDelegate(
-                  childCount: 1,
-                      (BuildContext context, int index) {
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: []
-                    );
-                  },
-                ),
+                delegate: SliverChildBuilderDelegate(childCount: 1, (
+                  BuildContext context,
+                  int index,
+                ) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [],
+                  );
+                }),
               ),
             ],
           ),
@@ -129,13 +125,15 @@ class _ParentHomeState extends State<ParentHome> {
     HiveStorageManager.clearData();
   }
 
-  Widget bottomNavigationBar(){
+  Widget bottomNavigationBar() {
     return BottomNavigationBarWidget(
-
-      backgroundColor: AppThemePreferences().appTheme.bottomNavBarBackgroundColor!,
-      selectedItemColor: AppThemePreferences().appTheme.bottomNavigationBarSelectedItemColor!,
-
-      unselectedItemColor: AppThemePreferences().appTheme.bottomNavigationBarUnSelectedItemColor!,
+      backgroundColor:
+          AppThemePreferences().appTheme.bottomNavBarBackgroundColor!,
+      // selectedItemColor: AppThemePreferences().appTheme.bottomNavigationBarSelectedItemColor!,
+      selectedItemColor: AppThemePreferences().appTheme.primaryColor,
+      unselectedItemColor: AppThemePreferences()
+          .appTheme
+          .bottomNavigationBarUnSelectedItemColor!,
       currentIndex: _selectedIndex,
       design: DESIGN_02,
       itemsMap: UtilityMethods.bottomNavBarMap(),
@@ -159,21 +157,14 @@ class _ParentHomeState extends State<ParentHome> {
           offset: Offset(0, 2),
         ),
       ],
-
     );
   }
-
 }
-
-
 
 class InternetConnectionErrorWidget extends StatelessWidget {
   final Function()? onPressed;
 
-  const InternetConnectionErrorWidget({
-    super.key,
-    required this.onPressed,
-  });
+  const InternetConnectionErrorWidget({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -181,11 +172,8 @@ class InternetConnectionErrorWidget extends StatelessWidget {
       bottom: 0,
       child: SafeArea(
         top: false,
-        child: NoInternetBottomActionBarWidget(
-          onPressed: onPressed,
-        ),
+        child: NoInternetBottomActionBarWidget(onPressed: onPressed),
       ),
     );
   }
 }
-

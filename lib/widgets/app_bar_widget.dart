@@ -1,4 +1,5 @@
 import 'package:app/file/app_preferences/app_preferences.dart';
+import 'package:app/file/common/constants.dart';
 import 'package:app/widgets/generic_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,7 +18,7 @@ class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
   final Widget? title;
 
   AppBarWidget({
-  Key? key,
+    Key? key,
     required this.appBarTitle,
     this.onBackPressed,
     this.elevation = 1.0,
@@ -33,7 +34,9 @@ class AppBarWidget extends StatefulWidget implements PreferredSizeWidget {
 
   @override
   // TODO: implement preferredSize
-  Size get preferredSize => Size.fromHeight((toolbarHeight ?? kToolbarHeight) + (bottom?.preferredSize.height ?? 0));
+  Size get preferredSize => Size.fromHeight(
+    (toolbarHeight ?? kToolbarHeight) + (bottom?.preferredSize.height ?? 0),
+  );
 
   @override
   State<AppBarWidget> createState() => _AppBarWidgetState();
@@ -45,25 +48,47 @@ class _AppBarWidgetState extends State<AppBarWidget> {
     return AppBar(
       automaticallyImplyLeading: widget.automaticallyImplyLeading,
       systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarColor: AppThemePreferences().appTheme.genericStatusBarColor,
-          statusBarIconBrightness: AppThemePreferences().appTheme.genericStatusBarIconBrightness,
-          statusBarBrightness:AppThemePreferences().appTheme.statusBarBrightness
+        statusBarColor: AppThemePreferences().appTheme.genericStatusBarColor,
+        statusBarIconBrightness:
+            AppThemePreferences().appTheme.genericStatusBarIconBrightness,
+        statusBarBrightness: AppThemePreferences().appTheme.statusBarBrightness,
       ),
-      backgroundColor: widget.backgroundColor ?? AppThemePreferences().appTheme.primaryColor,
+      backgroundColor: widget.backgroundColor ?? APP_SECONDARY_COLOR,
+
       leading: widget.automaticallyImplyLeading
           ? IconButton(
-              icon: Icon(AppThemePreferences.arrowBackIcon),
+              icon: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color:
+                        // AppThemePreferences()
+                        //     .appTheme
+                        //     .genericAppBarIconsColor ??
+                        // Colors.black,
+                    // Colors.white54,
+                    APP_DARK_COLOR,
+                    width: 1,
+                  ),
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Icon(AppThemePreferences.arrowBackIcon, size: 20),
+              ),
               color: AppThemePreferences().appTheme.genericAppBarIconsColor,
-              onPressed: widget.onBackPressed ??
-                  () => onBackPressedFunc(context),
+              onPressed:
+                  widget.onBackPressed ?? () => onBackPressedFunc(context),
             )
           : Container(),
-      leadingWidth: widget.automaticallyImplyLeading ? widget.leadingWidth : 0.0,
-      title: widget.title ?? GenericTextWidget(
-        widget.appBarTitle,
-        strutStyle: const StrutStyle(height: 1),
-        style: AppThemePreferences().appTheme.genericAppBarTextStyle,
-      ),
+      leadingWidth: widget.automaticallyImplyLeading
+          ? widget.leadingWidth
+          : 0.0,
+      title:
+          widget.title ??
+          GenericTextWidget(
+            widget.appBarTitle,
+            strutStyle: const StrutStyle(height: 1),
+            style: AppThemePreferences().appTheme.genericAppBarTextStyle,
+          ),
       centerTitle: widget.centerTitle,
       actions: widget.actions,
       bottom: widget.bottom,

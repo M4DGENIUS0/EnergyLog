@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:app/file/app_preferences/app_preferences.dart';
+import 'package:app/file/common/constants.dart';
 import 'package:app/widgets/generic_text_widget.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -38,13 +39,6 @@ class _InfoScreenState extends State<InfoScreen> {
           'SDK Version': build.version.sdkInt.toString(),
           'ID': build.id,
         };
-      } else if (Platform.isWindows) {
-        var data = await deviceInfoPlugin.windowsInfo;
-        deviceData = {
-          'Computer Name': data.computerName,
-          'Number of Cores': data.numberOfCores.toString(),
-          'System Memory': "${data.systemMemoryInMegabytes} MB",
-        };
       }
     } catch (e) {
       deviceData = {'Error': 'Failed to get device info: $e'};
@@ -59,16 +53,20 @@ class _InfoScreenState extends State<InfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: _deviceData.length,
-        itemBuilder: (context, index) {
-          String key = _deviceData.keys.elementAt(index);
-          String value = _deviceData[key].toString();
-          return _buildInfoCard(key, value);
-        },
+    return SafeArea(
+      top: true,
+
+      child: Padding(
+        padding:  EdgeInsets.only(top: 18.0),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: _deviceData.length,
+          itemBuilder: (context, index) {
+            String key = _deviceData.keys.elementAt(index);
+            String value = _deviceData[key].toString();
+            return _buildInfoCard(key, value);
+          },
+        ),
       ),
     );
   }
@@ -79,7 +77,8 @@ class _InfoScreenState extends State<InfoScreen> {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppThemePreferences().appTheme.containerBackgroundColor,
+        // color: AppThemePreferences().appTheme.containerBackgroundColor,
+        color: APP_DARK_COLOR,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(

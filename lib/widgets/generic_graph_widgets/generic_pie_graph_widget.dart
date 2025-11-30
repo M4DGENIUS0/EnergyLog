@@ -1,4 +1,5 @@
 import 'package:app/file/app_preferences/app_preferences.dart';
+import 'package:app/file/common/constants.dart';
 import 'package:app/widgets/generic_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -9,7 +10,6 @@ class GenericCircularAnnotatedGraph extends StatefulWidget {
    bool? showLabels;
    bool? showTicks;
    double? size;
-   Color lineAxisColor;
 
    GenericCircularAnnotatedGraph({
     super.key,
@@ -17,7 +17,6 @@ class GenericCircularAnnotatedGraph extends StatefulWidget {
     this.showLabels = false,
     this.size = 220,
      this.showTicks= false,
-     this.lineAxisColor = Colors.grey,
     this.isCharging = false,
   });
 
@@ -35,7 +34,7 @@ class _GenericCircularAnnotatedGraphState extends State<GenericCircularAnnotated
     } else if (widget.batteryLevel < 50) {
       progressColor = Colors.orange;
     } else {
-      progressColor = Colors.green;
+      progressColor = AppThemePreferences().appTheme.primaryColor!;
     }
 
     return SizedBox(
@@ -50,9 +49,11 @@ class _GenericCircularAnnotatedGraphState extends State<GenericCircularAnnotated
             showTicks: widget.showTicks!,
             startAngle: 130,
             endAngle: 50,
+            showAxisLine: true,
+
             axisLineStyle: AxisLineStyle(
               thickness: 15,
-              color: widget.lineAxisColor,
+              color: APP_DARK_COLOR,
               // thicknessUnit: GaugeSizeUnit.factor,
               cornerStyle: CornerStyle.bothCurve,
             ),

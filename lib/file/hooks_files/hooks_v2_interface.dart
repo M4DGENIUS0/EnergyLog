@@ -7,6 +7,10 @@ abstract class HooksV2Interface{
   DefaultLanguageCodeHook getDefaultLanguageHook();
   DefaultAppThemeModeHook getDefaultAppThemeModeHook();
   FontsHook getFontHook();
+  DefaultSelectedNotificationsFormatsHook getDefaultSelectedNotificationsFormatsHook();
+  AvailableNotificationsFormatsHook getAvailableNotificationsFormatsHook();
+
+
 
 
 }
