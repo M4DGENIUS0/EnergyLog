@@ -3,9 +3,7 @@ library constants;
 import 'dart:core';
 import 'dart:ui';
 
-String APP_NAME = 'Energy Logger';
-
-
+String APP_NAME = 'Energy Log';
 
 String APP_TERMS_URL = "https://houzi.booleanbites.com/terms.html";
 String APP_PRIVACY_URL = "https://houzi.booleanbites.com/privacy.html";
@@ -21,6 +19,7 @@ String COMPANY_URL = "https://booleanbites.com";
 ///
 /// Primary Color
 Color APP_PRIMARY_COLOR = Color(0xFF1FA656);
+
 ///
 /// Secondary Color
 Color APP_SECONDARY_COLOR = Color(0xFF0D120C);
@@ -28,9 +27,11 @@ Color APP_SECONDARY_COLOR = Color(0xFF0D120C);
 Color APP_SECONDARY_COLORS = Color(0xFF171a16);
 
 Color APP_DARK_COLOR = Color(0xFF222625);
+
 ///
 /// Un Selected Item Color
 Color UNSELECTED_ITEM_COLOR = Color(0xFFADAEA9);
+
 /// Provide google android banner ad id here
 String ANDROID_BANNER_AD_ID = "ca-app-pub-3940256099942544/6300978111";
 
@@ -70,6 +71,12 @@ const String APP_BASE_URL = 'app_base_url';
 const String APP_INFO = 'AppInfo';
 const String HIVE_BOX_OLD = 'Hive_Storage_Box';
 const String HIVE_BOX = 'Hive_Storage_Box_V1';
+
+/// Hive Keys
+
+const String IS_NOTIFICATION_ENABLED_KEY = "notifications_enabled";
+const String CHANGE_TEMPRETURE_UNIT_KEY = "temp_unit_celsius";
+const String CHANGE_POWER_UNIT_KEY = "power_unit_watts";
 
 const String APP_CONFIG_JSON_PATH = "assets/configurations/configurations.json";
 
@@ -120,8 +127,10 @@ const String PROPERTY_UNIQUE_ID = "property_id";
 const String PROPERTY_MULTI_CURRENCY = "Sale or Rent Price";
 const String ADD_MULTI_CURRENCY_DATA = 'multi_currencies';
 const String DEFAULT_MULTI_CURRENCY = 'default_multi_currency';
-const String CURRENCY_SWITCHER_ENABLED_STATUS = 'currency_switcher_enabled_status';
-const String SUPPORT_CURRENCIES_DATA = 'supported_currencies_for_currency_switcher';
+const String CURRENCY_SWITCHER_ENABLED_STATUS =
+    'currency_switcher_enabled_status';
+const String SUPPORT_CURRENCIES_DATA =
+    'supported_currencies_for_currency_switcher';
 const String BASE_CURRENCY_DATA = "base_currency_data";
 const String BASE_CURRENCY_NAME = "United States Dollar";
 const String CURRENCY_EXCHANGE_RATE_DATA = "currency_exchange_rate";
@@ -169,6 +178,7 @@ const String AGENCY_INFO = "agency_info";
 const String AUTHOR_ID = "author_id";
 const String AUTHOR_DATA = "author_data";
 const String AUTHOR_INFO = "author_info";
+
 /// Home Screen Drawer Related
 const String ADD_PROPERTY = 'Add Property';
 const String USER_SIGNUP_PAGE = 'User Signup';
@@ -267,7 +277,7 @@ const String APP_CONFIGURATIONS_STORE_KEY = 'appConfigurationsStoreKey';
 const String HOME_CONFIG_DATA_LIST = 'home_config_list';
 const String FILTER_CONFIG_DATA_LIST = 'filter_config_list';
 const String DRAWER_CONFIG_DATA_LIST = 'drawer_config_list';
-const String STORE_SELECTED_CURRENCY_CODE = 'currency_rates'; 
+const String STORE_SELECTED_CURRENCY_CODE = 'currency_rates';
 const String PROPERTY_DETAIL_CONFIG_DATA_LIST = 'property_detail_config_list';
 const String NAVBAR_CONFIG_DATA_LIST = 'navbar_config_list';
 const String SORT_FIRST_BY_CONFIG_DATA_LIST = 'sort_first_by_config_list';
@@ -425,12 +435,9 @@ const String ACTIVE_OPTION = 'active';
 const String WON_OPTION = 'won';
 const String LOST_OPTION = 'lost';
 
-
-
 // To Visible/Unvisible the agents and agencies
 const bool SHOW_AGENT_VISIBLE_ONLY = true;
 const bool SHOW_AGENCIES_VISIBLE_ONLY = true;
-
 
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -449,8 +456,6 @@ bool ENABLE_HTML_IN_DESCRIPTION = true;
 bool ENABLE_HTML_IN_BLOG_DESCRIPTION = true;
 
 const String DEMO_URL = 'https://demodomain.com/';
-
-
 
 ///When we send a demo version to a client, we need to set this as true,
 ///setting this to true will make the app request to a webservices,
@@ -534,10 +539,13 @@ const bool FETCH_DEV_API_CONFIG = false;
 
 /// Show Add Property In Profile
 bool SHOW_ADD_PROPERTY_IN_PROFILE = false;
+
 /// Show Rooms In Property Details
 bool SHOW_ROOMS_IN_PROPERTY_DETAILS = false;
+
 /// Show Rooms In Property Box
 bool SHOW_ROOMS_IN_PROPERTY_BOX = false;
+
 /// Show Map first instead of filter page
 bool SHOW_MAP_INSTEAD_FILTER = false;
 
@@ -601,14 +609,14 @@ List<String> homeLocationPickerHierarchyList = [
   propertyCountryDataType,
   propertyStateDataType,
   propertyCityDataType,
-  propertyAreaDataType
+  propertyAreaDataType,
 ];
 
 List<String> filterLocationPickerHierarchyList = [
   propertyCountryDataType,
   propertyStateDataType,
   propertyCityDataType,
-  propertyAreaDataType
+  propertyAreaDataType,
 ];
 
 String DEFAULT_SORT_BY_OPTION = sortByOptionsList[0];
@@ -870,10 +878,7 @@ const List<String> HOME_SCREEN_ITEM_DESIGN_LIST = [
   DESIGN_08,
 ];
 
-const List<String> EXPLORE_BY_TYPE_ITEM_DESIGN_LIST = [
-  DESIGN_01,
-  DESIGN_02,
-];
+const List<String> EXPLORE_BY_TYPE_ITEM_DESIGN_LIST = [DESIGN_01, DESIGN_02];
 
 /// Explore Properties By Cities Design Related
 const String EXPLORE_PROPERTIES_BY_CITIES_DESIGN = DESIGN_02;
@@ -1059,8 +1064,10 @@ const String showAndroidAdsConfiguration = "show_android_ads";
 const String showIOSAdsConfiguration = "show_ios_ads";
 const String showAddPropertyInProfileConfiguration =
     "show_add_property_in_profile";
-const String showRoomsInPropertyDetailsConfiguration = "show_rooms_for_property_details";
-const String showRoomsInPropertyBoxConfiguration = "show_rooms_for_property_box";
+const String showRoomsInPropertyDetailsConfiguration =
+    "show_rooms_for_property_details";
+const String showRoomsInPropertyBoxConfiguration =
+    "show_rooms_for_property_box";
 const String showMapInsteadFilterConfiguration = "show_map_instead_filter";
 const String showEmailButtonDetailPageConfiguration = "show_email_button";
 const String showCallButtonDetailPageConfiguration = "show_call_button";
@@ -1258,10 +1265,11 @@ const String defaultCurrencySymbolKey = "default_currency_symbol";
 const String propertyReviewsKey = "property_reviews";
 const String multiCurrencyEnabledKey = "multi_currency_enabled";
 const String multiCurrencyKey = "multi_currencies";
-const String defaultMultiCurrency ="default_multi_currency"; 
-const String supportCurrenciesForCurrencySwitcherKey = "supported_currencies_for_currency_switcher";
+const String defaultMultiCurrency = "default_multi_currency";
+const String supportCurrenciesForCurrencySwitcherKey =
+    "supported_currencies_for_currency_switcher";
 const String currenciesExchangeRatesKey = "currency_exchange_rate";
-const String exchangeRateCurrencyDataKey =  "currency_rates";
+const String exchangeRateCurrencyDataKey = "currency_rates";
 const String baseCurrrencyKey = "base_currency";
 const String customFieldsKey = "custom_fields";
 const String currencyPositionKey = "currency_position";
@@ -1548,7 +1556,7 @@ const List<String> chipsRelatedList = [
   propertyCityDataType,
   propertyStatusDataType,
   propertyLabelDataType,
-  propertyFeatureDataType
+  propertyFeatureDataType,
 ];
 
 const List<String> locationRelatedList = [
@@ -1979,11 +1987,13 @@ const String USER_APPROVAL_STATUS_APPROVED = "Approved";
 const String USER_APPROVAL_STATUS_PENDING = "Pending";
 const String USER_APPROVAL_STATUS_DECLINE = "Declined";
 const String USER_APPROVAL_STATUS_SUSPEND = "Suspended";
+
 /// User Approval actions types
 const String USER_APPROVAL_ACTIONS_APPROVE = "approve";
 const String USER_APPROVAL_ACTIONS_DECLINE = "decline";
 const String USER_APPROVAL_ACTIONS_SUSPEND = "suspend";
 const String USER_APPROVAL_ACTIONS_PENDING = "pending";
+
 /// Insights Line Graph with their values
 const String INSIGHTS_LABEL_SORT_LAST_DAY = "Last 24 Hour";
 const String INSIGHTS_LABEL_SORT_LAST_WEEK = "Last 7 Days";
@@ -1991,7 +2001,7 @@ const String INSIGHTS_LABEL_SORT_LAST_MONTH = "Last 30 Days";
 const List<String> INSIGHTS_LABEL_SORT_LIST = [
   INSIGHTS_LABEL_SORT_LAST_DAY,
   INSIGHTS_LABEL_SORT_LAST_WEEK,
-  INSIGHTS_LABEL_SORT_LAST_MONTH
+  INSIGHTS_LABEL_SORT_LAST_MONTH,
 ];
 
 const String INSIGHTS_VALUE_SORT_LAST_DAYS = "lastday";
@@ -2001,18 +2011,21 @@ const String INSIGHTS_VALUE_SORT_LAST_30_DAYS = "lastmonth";
 const List<String> INSIGHTS_VALUE_SORT_LIST = [
   INSIGHTS_VALUE_SORT_LAST_DAYS,
   INSIGHTS_VALUE_SORT_LAST_7_DAYS,
-  INSIGHTS_VALUE_SORT_LAST_30_DAYS
+  INSIGHTS_VALUE_SORT_LAST_30_DAYS,
 ];
+
 /// Review Approval Status types
 const String REVIEW_APPROVAL_STATUS_APPROVE = "Approved";
 const String REVIEW_APPROVAL_STATUS_REJECT = "reject";
 const String REVIEW_APPROVAL_STATUS_DELETE = "delete";
 const String REVIEW_APPROVAL_STATUS_PENDING = "pending";
+
 /// Review Approval actions types
 const String REVIEW_APPROVAL_ACTIONS_PUBLISH = "publish";
 const String REVIEW_APPROVAL_ACTIONS_REVIEW_REJECT = "review_rejected";
 const String REVIEW_APPROVAL_ACTIONS_DECLINE = "decline";
 const String REVIEW_APPROVAL_ACTIONS_SUSPEND = "delete";
+
 /// User Reviews Filter List
 const List<String> USER_REVIEWS_FILTER_LIST = [
   REVIEW_APPROVAL_ACTIONS_PUBLISH,

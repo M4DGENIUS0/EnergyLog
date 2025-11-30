@@ -263,7 +263,7 @@ class AppThemePreferences{
   static Brightness statusBarIconBrightnessLight = Brightness.light;
   ///
   /// Generic Status Bar Icons Brightness Light:
-  static Brightness genericStatusBarIconBrightnessLight = Brightness.light;
+  static Brightness genericStatusBarIconBrightnessLight = Brightness.dark;
   ///
   ///
   /// Brightness Dark:
@@ -667,7 +667,8 @@ class AppThemePreferences{
   static Color backgroundColorLight =  Colors.white;
   ///
   /// Divider color
-  static Color dividerColorLight =  Color(0x1F000000);
+  // static Color dividerColorLight =  Color(0x1F000000);
+  static Color dividerColor = Colors.white54;
   ///
   /// Card color
   static Color cardColorLight =  Colors.white;
@@ -2150,7 +2151,8 @@ class AppTheme{
     _sliverAppBarBackgroundColor = (isDark ? AppThemePreferences.sliverAppBarBackgroundColorDark : AppThemePreferences.sliverAppBarBackgroundColorLight)!;
     _sliverAppBar02BackgroundColor = isDark ? AppThemePreferences.sliverAppBarBackgroundColorDark : AppThemePreferences.sliverAppBar02BackgroundColorLight;
     _backgroundColor = isDark ? AppThemePreferences.backgroundColorDark : AppThemePreferences.backgroundColorLight;
-    _dividerColor = isDark ? AppThemePreferences.dividerColorDark : AppThemePreferences.dividerColorLight;
+    // _dividerColor = isDark ? AppThemePreferences.dividerColorDark : AppThemePreferences.dividerColorLight;
+    _dividerColor = isDark ? AppThemePreferences.dividerColorDark : AppThemePreferences.dividerColor;
     _cardColor = isDark ? AppThemePreferences.cardColorDark : AppThemePreferences.cardColorLight;
     _hintColor = isDark ? AppThemePreferences.hintColorDark : AppThemePreferences.hintColorLight;
     _shimmerEffectBaseColor = (isDark ? AppThemePreferences.shimmerEffectBaseColorDark : AppThemePreferences.shimmerEffectBaseColorLight)!;

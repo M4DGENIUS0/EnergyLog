@@ -1,7 +1,12 @@
-
 import 'package:app/file/app_preferences/app_preferences.dart';
 import 'package:app/file/common/constants.dart';
+import 'package:app/file/generic_methods/utility_methods.dart';
+import 'package:app/widgets/custom_widgets/card_widget.dart';
+import 'package:app/widgets/generic_settings_row_widget.dart';
 import 'package:app/widgets/generic_text_widget.dart';
+import 'package:app/widgets/notifications_widgets/notification_related_widgets/notification_format.dart';
+import 'package:app/widgets/settings_widget/dark_mode_setting.dart';
+import 'package:app/widgets/settings_widget/language_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -25,6 +30,11 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
     installerStore: 'Unknown',
   );
 
+  bool notificationsEnabled =
+      HiveStorageManager.readNotificationEnabled() ?? false;
+  bool isCelsius = HiveStorageManager.readChangeTempretureUnit() ?? false;
+  bool isWatts = HiveStorageManager.readPowerUnit() ?? false;
+
   @override
   void initState() {
     super.initState();
@@ -41,116 +51,289 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
   @override
   Widget build(BuildContext context) {
     bool isDark = Theme.of(context).brightness == Brightness.dark;
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return SafeArea(
+      top: true,
+      child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SizedBox(height: 100),
+              Icon(
+                Icons.info_outline,
+                size: 80,
+                color: AppThemePreferences().appTheme.primaryColor,
+              ),
+              const SizedBox(height: 20),
+              GenericTextWidget(
+                _packageInfo.appName,
+                style: TextStyle(
+                  fontSize: AppThemePreferences.headingFontSize,
+                  fontWeight: AppThemePreferences.headingFontWeight,
+                  color: isDark
+                      ? AppThemePreferences.headingTextColorDark
+                      : AppThemePreferences.headingTextColorLight,
+                ),
+              ),
+              const SizedBox(height: 10),
+              GenericTextWidget(
+                "Version: ${_packageInfo.version}",
+                style: TextStyle(
+                  fontSize: AppThemePreferences.bodyFontSize,
+                  fontWeight: AppThemePreferences.bodyFontWeight,
+                  color: isDark
+                      ? AppThemePreferences.bodyTextColorDark
+                      : AppThemePreferences.bodyTextColorLight,
+                ),
+              ),
+              const SizedBox(height: 5),
+              GenericTextWidget(
+                "Build Number: ${_packageInfo.buildNumber}",
+                style: TextStyle(
+                  fontSize: AppThemePreferences.subBodyFontSize,
+                  fontWeight: AppThemePreferences.subBodyFontWeight,
+                  color: isDark
+                      ? AppThemePreferences.subBodyTextColorDark
+                      : AppThemePreferences.subBodyTextColorLight,
+                ),
+              ),
+              const SizedBox(height: 40),
+              Container(
+                padding: const EdgeInsets.only(top: 20.0),
+                child: Column(
+                  children: [
+                    appSettingWidget(),
+                    Container(height: 20.0),
+                    preferencesWidget(),
+                    Container(height: 20.0),
+
+                    Container(height: 40.0),
+                  ],
+                ),
+              )
+
+
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget appSettingWidget(){
+    return CardWidget(
+      shape: AppThemePreferences.roundedCorners(
+        AppThemePreferences.globalRoundedCornersRadius,
+      ),
+      color: APP_DARK_COLOR,
+      child: GenericSettingsWidget(
+        headingText: UtilityMethods.getLocalizedString("preference"),
+        headingSubTitleText: UtilityMethods.getLocalizedString(
+          "customise_your_experience_on_app",
+        ),
+        removeDecoration: true,
+        body: Column(
+          crossAxisAlignment: .start,
+
           children: [
-            Icon(
-              Icons.info_outline,
-              size: 80,
-              color: AppThemePreferences().appTheme.primaryColor,
-            ),
-            const SizedBox(height: 20),
-            GenericTextWidget(
-              _packageInfo.appName,
-              style: TextStyle(
-                fontSize: AppThemePreferences.headingFontSize,
-                fontWeight: AppThemePreferences.headingFontWeight,
-                color: isDark ? AppThemePreferences.headingTextColorDark : AppThemePreferences.headingTextColorLight,
+            GenericWidgetRow(
+              iconData: AppThemePreferences.notificationIcon,
+              text: UtilityMethods.getLocalizedString(
+                "enable_notification",
               ),
-            ),
-            const SizedBox(height: 10),
-            GenericTextWidget(
-              "Version: ${_packageInfo.version}",
-              style: TextStyle(
-                fontSize: AppThemePreferences.bodyFontSize,
-                fontWeight: AppThemePreferences.bodyFontWeight,
-                color: isDark ? AppThemePreferences.bodyTextColorDark : AppThemePreferences.bodyTextColorLight,
-              ),
-            ),
-            const SizedBox(height: 5),
-            GenericTextWidget(
-              "Build Number: ${_packageInfo.buildNumber}",
-              style: TextStyle(
-                fontSize: AppThemePreferences.subBodyFontSize,
-                fontWeight: AppThemePreferences.subBodyFontWeight,
-                color: isDark ? AppThemePreferences.subBodyTextColorDark : AppThemePreferences.subBodyTextColorLight,
-              ),
-            ),
-            const SizedBox(height: 40),
-            SvgPicture.asset(
-              'assets/logo.svg',
-              width: 100,
-              height: 100,
-            ),
-            const SizedBox(height: 20),
-            ValueListenableBuilder(
-              valueListenable: Hive.box(HIVE_BOX).listenable(keys: ['notifications_enabled']),
-              builder: (context, box, widget) {
-                bool notificationsEnabled = box.get('notifications_enabled', defaultValue: true);
-                return SwitchListTile(
-                  title: GenericTextWidget(
-                    "Enable Notifications",
-                    style: TextStyle(
-                      fontSize: AppThemePreferences.bodyFontSize,
-                      fontWeight: AppThemePreferences.bodyFontWeight,
-                      color: isDark ? AppThemePreferences.bodyTextColorDark : AppThemePreferences.bodyTextColorLight,
-                    ),
-                  ),
-                  value: notificationsEnabled,
-                  onChanged: (value) {
-                    box.put('notifications_enabled', value);
-                  },
-                );
+              removeDecoration: false,
+              switchButtonEnabled: true,
+              // switchButtonText: ,
+              switchButtonValue: notificationsEnabled,
+              onTapSwitch: (v) {
+                setState(() {
+                  notificationsEnabled = v;
+                });
+                HiveStorageManager.storeNotificationEnabled(v);
               },
             ),
-            const SizedBox(height: 10),
-            ValueListenableBuilder(
-              valueListenable: Hive.box(HiveStorageManager.userBoxName).listenable(keys: ['temp_unit_celsius']),
-              builder: (context, box, widget) {
-                bool isCelsius = box.get('temp_unit_celsius', defaultValue: true);
-                return SwitchListTile(
-                  title: GenericTextWidget(
-                    "Temperature Unit (${isCelsius ? '°C' : '°F'})",
-                    style: TextStyle(
-                      fontSize: AppThemePreferences.bodyFontSize,
-                      fontWeight: AppThemePreferences.bodyFontWeight,
-                      color: AppThemePreferences().appTheme.bodyTextColor,
-                    ),
-                  ),
-                  value: isCelsius,
-                  onChanged: (value) {
-                    box.put('temp_unit_celsius', value);
-                  },
-                );
+            GenericWidgetRow(
+              iconData: AppThemePreferences.darkModeIcon,
+              text: UtilityMethods.getLocalizedString("notification_format"),
+              removeDecoration: false,
+              onTap: ()=> onNotificationSettingsTap(context),
+            ),
+            GenericWidgetRow(
+              // iconData: AppThemePreferences.notificationIcon,
+              iconData: Icons.electric_bolt,
+              text: UtilityMethods.getLocalizedString(
+                "Power Unit (${isWatts ? 'W' : 'mW'})",
+              ),
+              switchButtonEnabled: true,
+              // switchButtonText: ,
+              switchButtonValue: isWatts,
+              onTapSwitch: (v) {
+                setState(() {
+                  isWatts = v;
+                });
+                HiveStorageManager.storePowerUnit(v);
+
               },
             ),
-            const SizedBox(height: 10),
-            ValueListenableBuilder(
-              valueListenable: Hive.box(HiveStorageManager.userBoxName).listenable(keys: ['power_unit_watts']),
-              builder: (context, box, widget) {
-                bool isWatts = box.get('power_unit_watts', defaultValue: true);
-                return SwitchListTile(
-                  title: GenericTextWidget(
-                    "Power Unit (${isWatts ? 'W' : 'mW'})",
-                    style: TextStyle(
-                      fontSize: AppThemePreferences.bodyFontSize,
-                      fontWeight: AppThemePreferences.bodyFontWeight,
-                      color: AppThemePreferences().appTheme.bodyTextColor,
-                    ),
-                  ),
-                  value: isWatts,
-                  onChanged: (value) {
-                    box.put('power_unit_watts', value);
-                  },
-                );
+
+            GenericWidgetRow(
+              // iconData: AppThemePreferences.notificationIcon,
+              iconData: Icons.thermostat,
+              text: UtilityMethods.getLocalizedString(
+                "Temperature Unit (${isCelsius ? '°C' : '°F'})",
+              ),
+              switchButtonEnabled: true,
+              // switchButtonText: ,
+              switchButtonValue: isCelsius,
+              onTapSwitch: (v) {
+                setState(() {
+                  isCelsius = v;
+                });
+                HiveStorageManager.storeChangeTempretureUnit(v);
               },
             ),
+
           ],
         ),
       ),
     );
+  }
+
+  Widget preferencesWidget(){
+    return CardWidget(
+      shape: AppThemePreferences.roundedCorners(
+        AppThemePreferences.globalRoundedCornersRadius,
+      ),
+      color: APP_DARK_COLOR,
+      child: GenericSettingsWidget(
+        enableBottomDecoration: false,
+        headingText: UtilityMethods.getLocalizedString("preference"),
+        headingSubTitleText: UtilityMethods.getLocalizedString("customise_your_experience_on_app", ),
+        // headingSubTitleText: AppLocalizations.of(context).customise_your_experience_on_app(appName),
+        removeDecoration: true,
+
+        body: Column(
+          crossAxisAlignment: .start,
+          children: [
+            GenericWidgetRow(
+              iconData: AppThemePreferences.darkModeIcon,
+              text: UtilityMethods.getLocalizedString("dark_mode"),
+              removeDecoration: false,
+              onTap: ()=> onDarkModeSettingsTap(context),
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: AppThemePreferences.languageIcon,
+              text: UtilityMethods.getLocalizedString("language_label"),
+              removeDecoration: true,
+              onTap: ()=> onLanguageSettingsTap(context),
+            ),
+
+
+          ],
+        ),
+      ),
+    );
+  }
+
+  void onNotificationSettingsTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+      context: context,
+      builder: (context) => NotificationFormatSettings(),
+    );
+  }
+
+  void onDarkModeSettingsTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+      context: context,
+      builder: (context) => DarkModeSettings(),
+    );
+  }
+
+  void onLanguageSettingsTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+      context: context,
+      builder: (context) => LanguageSettings(),
+    );
+  }
+
+  void onEditProfileTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) {
+    //
+    //   },
+    // );
+  }
+
+  void onPropertiesTap(BuildContext context) {
+    // isUserLogged
+    //     ? UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => Properties(),
+    // )
+    //     : onLogInTap(context);
+  }
+
+  void onAddPropertyTap(BuildContext context) {
+    // isUserLogged
+    //     ? UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) {
+    //     return UtilityMethods.navigateToAddPropertyPage();
+    //   },
+    //   // builder: (context) => AddPropertyV2(),
+    //   // builder: (context) => AddProperty(),
+    // )
+    // : onLogInTap(context);
+  }
+
+  void onAllUsersTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => AllUsers(),
+    // );
+  }
+
+  void onAllReviewsTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => AllReviews(fromProperty: false,),
+    // );
+  }
+
+  void onInsightsTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => Insights(),
+    // );
+  }
+
+  void onSettingsTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => HomePageSettings(),
+    // );
+  }
+
+  void onRequestDemoTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => ContactDeveloper(),
+    // );
+  }
+
+  onLogInTap(BuildContext context) {
+    // UtilityMethods.navigateToRoute(
+    //   context: context,
+    //   builder: (context) => UserSignIn(
+    //         (String closeOption) {
+    //       if (closeOption == CLOSE) {
+    //         Navigator.pop(context);
+    //       }
+    //     },
+    //   ),
+    // );
   }
 }
