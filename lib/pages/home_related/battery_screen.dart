@@ -3,6 +3,7 @@ import 'package:app/file/app_preferences/app_preferences.dart';
 import 'package:app/file/common/constants.dart';
 import 'package:app/model/battery_info.dart';
 import 'package:app/repository/battery_repository.dart';
+import 'package:app/services/notification_service.dart';
 import 'package:app/widgets/generic_text_widget.dart';
 import 'package:app/widgets/generic_graph_widgets/generic_pie_graph_widget.dart';
 import 'package:battery_plus/battery_plus.dart';
@@ -45,12 +46,15 @@ class _BatteryScreenState extends State<BatteryScreen> {
 
   bool get isCelsius => HiveStorageManager.readChangeTempretureUnit() ?? false;
   bool get isWatts => HiveStorageManager.readPowerUnit() ?? false;
+  var rawFormats = HiveStorageManager.readNotificationFormat();
+  List<String> notificationFormat = [];
 
   double get displayTemp => isCelsius
       ? _batteryInfo.temperature
       : (_batteryInfo.temperature * 9 / 5) + 32;
 
-  double get displayPower => isWatts ? _batteryInfo.power : _batteryInfo.power * 1000;
+  double get displayPower =>
+      isWatts ? _batteryInfo.power : _batteryInfo.power * 1000;
 
   @override
   void initState() {
@@ -79,7 +83,9 @@ class _BatteryScreenState extends State<BatteryScreen> {
     // });
 
     // Listen to battery state changes
-    _batteryStateSubscription = _batteryRepository.batteryStateStream.listen((state) {
+    _batteryStateSubscription = _batteryRepository.batteryStateStream.listen((
+      state,
+    ) {
       if (mounted) {
         setState(() {
           _batteryState = state;
@@ -89,7 +95,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
 
     // Listen to detailed battery info
     _batteryInfoSubscription = _batteryRepository.batteryInfoStream.listen(
-          (batteryInfo) {
+      (batteryInfo) {
         if (mounted) {
           setState(() {
             _batteryInfo = batteryInfo;
@@ -98,6 +104,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
               _batteryLevel = batteryInfo.level!;
             }
           });
+          _checkBatteryNotifications();
         }
       },
       onError: (error) {
@@ -129,6 +136,48 @@ class _BatteryScreenState extends State<BatteryScreen> {
     }
   }
 
+  void _checkBatteryNotifications() {
+    bool notificationsEnabled =
+        HiveStorageManager.readNotificationEnabled() ?? false;
+    if (!notificationsEnabled) return;
+
+    var rawFormats = HiveStorageManager.readNotificationFormat();
+    List<String> notificationFormat = [];
+    if (rawFormats is List) {
+      notificationFormat = rawFormats.cast<String>();
+    }
+
+    // Battery Full
+    if (_batteryLevel == 100 &&
+        (_batteryState == BatteryState.charging ||
+            _batteryState == BatteryState.full) &&
+        notificationFormat.contains("battery_full_charged")) {
+      NotificationService().showNotification(
+        "Battery Full",
+        "Your battery is fully charged. Unplug to save energy.",
+      );
+    }
+
+    // Low Battery
+    if (_batteryLevel <= 20 &&
+        _batteryState == BatteryState.discharging &&
+        notificationFormat.contains("battery_low_power")) {
+      NotificationService().showNotification(
+        "Low Battery",
+        "Battery is low ($_batteryLevel%). Please charge soon.",
+      );
+    }
+
+    // High Temperature
+    if (_batteryInfo.temperature > 45 &&
+        notificationFormat.contains("temperature_high_alert")) {
+      NotificationService().showNotification(
+        "High Temperature",
+        "Battery temperature is high (${_batteryInfo.temperature}°C). Cool down your device.",
+      );
+    }
+  }
+
   @override
   void dispose() {
     // _batteryLevelSubscription?.cancel();
@@ -140,7 +189,8 @@ class _BatteryScreenState extends State<BatteryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isCharging = _batteryState == BatteryState.charging ||
+    bool isCharging =
+        _batteryState == BatteryState.charging ||
         _batteryState == BatteryState.full;
 
     return SafeArea(
@@ -276,38 +326,38 @@ class _BatteryScreenState extends State<BatteryScreen> {
                 const Spacer(),
                 _batteryInfo.screenTime == -1
                     ? Row(
-                  children: [
-                    const GenericTextWidget(
-                      "Grant Permission",
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orangeAccent,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    const Icon(
-                      Icons.arrow_forward_ios,
-                      size: 14,
-                      color: Colors.orangeAccent,
-                    ),
-                  ],
-                )
+                        children: [
+                          const GenericTextWidget(
+                            "Grant Permission",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.orangeAccent,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.arrow_forward_ios,
+                            size: 14,
+                            color: Colors.orangeAccent,
+                          ),
+                        ],
+                      )
                     : RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text:
-                        "${(_batteryInfo.screenTime / 60).floor()}h ${_batteryInfo.screenTime % 60}m",
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        text: TextSpan(
+                          children: [
+                            TextSpan(
+                              text:
+                                  "${(_batteryInfo.screenTime / 60).floor()}h ${_batteryInfo.screenTime % 60}m",
+                              style: const TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -339,73 +389,73 @@ class _BatteryScreenState extends State<BatteryScreen> {
           Expanded(
             child: _batteryHistory.isEmpty
                 ? const Center(
-              child: GenericTextWidget(
-                "Collecting data...",
-                style: TextStyle(color: Colors.white54),
-              ),
-            )
+                    child: GenericTextWidget(
+                      "Collecting data...",
+                      style: TextStyle(color: Colors.white54),
+                    ),
+                  )
                 : BarChart(
-              BarChartData(
-                gridData: const FlGridData(show: false),
-                titlesData: FlTitlesData(
-                  show: true,
-                  rightTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  topTitles: const AxisTitles(
-                    sideTitles: SideTitles(showTitles: false),
-                  ),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      getTitlesWidget: (value, meta) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: GenericTextWidget(
-                            "${value.toInt()}m",
-                            style: const TextStyle(
-                              color: Colors.white54,
-                              fontSize: 10,
-                            ),
+                    BarChartData(
+                      gridData: const FlGridData(show: false),
+                      titlesData: FlTitlesData(
+                        show: true,
+                        rightTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        topTitles: const AxisTitles(
+                          sideTitles: SideTitles(showTitles: false),
+                        ),
+                        bottomTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            getTitlesWidget: (value, meta) {
+                              return Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: GenericTextWidget(
+                                  "${value.toInt()}m",
+                                  style: const TextStyle(
+                                    color: Colors.white54,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                  leftTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      reservedSize: 30,
-                      getTitlesWidget: (value, meta) {
-                        return GenericTextWidget(
-                          "${value.toInt()}%",
-                          style: const TextStyle(
-                            color: Colors.white54,
-                            fontSize: 10,
+                        ),
+                        leftTitles: AxisTitles(
+                          sideTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 30,
+                            getTitlesWidget: (value, meta) {
+                              return GenericTextWidget(
+                                "${value.toInt()}%",
+                                style: const TextStyle(
+                                  color: Colors.white54,
+                                  fontSize: 10,
+                                ),
+                              );
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
-                ),
-                borderData: FlBorderData(show: false),
-                barGroups: _batteryHistory.map((spot) {
-                  return BarChartGroupData(
-                    x: spot.x.toInt(),
-                    barRods: [
-                      BarChartRodData(
-                        toY: spot.y,
-                        color: APP_PRIMARY_COLOR,
-                        width: 12,
-                        borderRadius: BorderRadius.circular(4),
+                        ),
                       ),
-                    ],
-                  );
-                }).toList(),
-                maxY: 100,
-                minY: 0,
-              ),
-            ),
+                      borderData: FlBorderData(show: false),
+                      barGroups: _batteryHistory.map((spot) {
+                        return BarChartGroupData(
+                          x: spot.x.toInt(),
+                          barRods: [
+                            BarChartRodData(
+                              toY: spot.y,
+                              color: APP_PRIMARY_COLOR,
+                              width: 12,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                          ],
+                        );
+                      }).toList(),
+                      maxY: 100,
+                      minY: 0,
+                    ),
+                  ),
           ),
         ],
       ),
@@ -413,7 +463,6 @@ class _BatteryScreenState extends State<BatteryScreen> {
   }
 }
 
-// Keep GenericInfoCard class here as it's a UI component
 class GenericInfoCard extends StatelessWidget {
   final Widget icon;
   final String title;

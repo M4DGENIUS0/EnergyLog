@@ -41,7 +41,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
 
   void _startListeningToSystemInfo() {
     _systemSubscription = _systemChannel.receiveBroadcastStream().listen(
-          (dynamic event) {
+      (dynamic event) {
         if (event is Map) {
           if (mounted) {
             setState(() {
@@ -62,9 +62,18 @@ class _MonitorScreenState extends State<MonitorScreen> {
     if (_totalMemory > 0) {
       double usagePercentage = (_usedMemory / _totalMemory) * 100;
 
-      bool notificationsEnabled = HiveStorageManager.readNotificationEnabled() ?? false;
+      bool notificationsEnabled =
+          HiveStorageManager.readNotificationEnabled() ?? false;
 
-      if (usagePercentage > 90 && notificationsEnabled) {
+      var rawFormats = HiveStorageManager.readNotificationFormat();
+      List<String> notificationFormat = [];
+      if (rawFormats is List) {
+        notificationFormat = rawFormats.cast<String>();
+      }
+
+      if (usagePercentage > 90 &&
+          notificationsEnabled &&
+          notificationFormat.contains("high_memory_usage")) {
         NotificationService().showNotification(
           "High Memory Usage",
           "RAM usage is above 90%! (${usagePercentage.toStringAsFixed(1)}%)",
@@ -117,12 +126,15 @@ class _MonitorScreenState extends State<MonitorScreen> {
           children: [
             SizedBox(height: 40),
 
-            _buildHeading("Performance Monitor", "Monitor and analyze real-time system and application performance data"),
+            _buildHeading(
+              "Performance Monitor",
+              "Monitor and analyze real-time system and application performance data",
+            ),
             const SizedBox(height: 20),
             _buildMonitorCard(
               title: "RAM Usage",
               value:
-              "${(_usedMemory / 1024 / 1024).toStringAsFixed(0)} MB / ${(_totalMemory / 1024 / 1024).toStringAsFixed(0)} MB",
+                  "${(_usedMemory / 1024 / 1024).toStringAsFixed(0)} MB / ${(_totalMemory / 1024 / 1024).toStringAsFixed(0)} MB",
               spots: ramSpots,
               color: Colors.blueAccent,
               maxY: 100,
@@ -131,7 +143,7 @@ class _MonitorScreenState extends State<MonitorScreen> {
             _buildMonitorCard(
               title: "CPU Usage (Simulated)",
               value:
-              "${cpuSpots.isNotEmpty ? cpuSpots.last.y.toStringAsFixed(1) : '0'}% / 100%",
+                  "${cpuSpots.isNotEmpty ? cpuSpots.last.y.toStringAsFixed(1) : '0'}% / 100%",
               spots: cpuSpots,
               color: Colors.redAccent,
               maxY: 100,
@@ -217,9 +229,12 @@ class _MonitorScreenState extends State<MonitorScreen> {
             height: 200,
             child: LineChart(
               LineChartData(
-                gridData: FlGridData(show: true,),
-                titlesData: FlTitlesData(show: false,),
-                borderData: FlBorderData(show: true, border: Border.all(color: Colors.white10)),
+                gridData: FlGridData(show: true),
+                titlesData: FlTitlesData(show: false),
+                borderData: FlBorderData(
+                  show: true,
+                  border: Border.all(color: Colors.white10),
+                ),
                 minX: spots.isNotEmpty ? spots.first.x : 0,
                 maxX: spots.isNotEmpty ? spots.last.x : 60,
                 minY: 0,

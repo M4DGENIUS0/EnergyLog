@@ -159,6 +159,26 @@ class HooksV2 implements HooksV2Interface {
       "remaining_time",
       "watts",
       "amperes"
+
+       /// Battery Alerts & Limits
+      "battery_charging_limit",      
+      "battery_discharge_limit",    
+      "battery_full_charged",       
+      "battery_low_power",          
+      
+      /// Temperature Alerts
+      "temperature_high_alert",      
+      "temperature_normal",         
+      
+      /// System & Permission Alerts
+      "usage_stats_permission",      
+      "high_memory_usage",           
+      "high_cpu_usage",              
+      
+      /// Charging Status
+      "charging_started",            
+      "charging_stopped",            
+      "charging_status_change",   
       ];
     return availableNotifications;
 

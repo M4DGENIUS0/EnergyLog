@@ -8,19 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-
-class UtilityMethods{
-
-
-  static bool validateURL(String? url){
-    if(url == null || url.isEmpty){
+class UtilityMethods {
+  static bool validateURL(String? url) {
+    if (url == null || url.isEmpty) {
       return false;
     }
     bool isURLValid = Uri.parse(url).isAbsolute;
     return isURLValid;
   }
 
-  static String getLocalizedString(String key,{List? inputWords}){
+  static String getLocalizedString(String key, {List? inputWords}) {
     if (inputWords == null) {
       String translated = key.localisedString([]) ?? key;
       if (translated == "null") {
@@ -40,63 +37,75 @@ class UtilityMethods{
     return Bidi.isRtlLanguage(Localizations.localeOf(context).languageCode);
   }
 
-  static String toTitleCase(String inputString){
-    return inputString.replaceAll(RegExp(' +'), ' ').split(" ").map((str) => toCapitalized(str)).join(" ");
+  static String toTitleCase(String inputString) {
+    return inputString
+        .replaceAll(RegExp(' +'), ' ')
+        .split(" ")
+        .map((str) => toCapitalized(str))
+        .join(" ");
   }
 
   static String toCapitalized(String inputString) {
-    return inputString.isNotEmpty ?'${inputString[0].toUpperCase()}${inputString.substring(1)}':'';
+    return inputString.isNotEmpty
+        ? '${inputString[0].toUpperCase()}${inputString.substring(1)}'
+        : '';
   }
 
   static String stripHtmlIfNeeded(String text) {
     return text.replaceAll(RegExp(r'<[^>]*>|&[^;]+;'), ' ');
   }
 
-  static NumberFormat getNumberFormat(){
+  static NumberFormat getNumberFormat() {
     NumberFormat? numberFormat;
-    if(THOUSAND_SEPARATOR == ",") {
-      numberFormat =  NumberFormat("#$THOUSAND_SEPARATOR###$DECIMAL_POINT_SEPARATOR##");
-    } else if(THOUSAND_SEPARATOR == ".") {
-      numberFormat = NumberFormat.currency(locale: 'eu',customPattern: '#$DECIMAL_POINT_SEPARATOR###', decimalDigits: 0);
-
-    } else if(THOUSAND_SEPARATOR == " ") {
-      numberFormat = NumberFormat.currency(locale: 'fr',customPattern: '#,###', decimalDigits: 0);
+    if (THOUSAND_SEPARATOR == ",") {
+      numberFormat = NumberFormat(
+        "#$THOUSAND_SEPARATOR###$DECIMAL_POINT_SEPARATOR##",
+      );
+    } else if (THOUSAND_SEPARATOR == ".") {
+      numberFormat = NumberFormat.currency(
+        locale: 'eu',
+        customPattern: '#$DECIMAL_POINT_SEPARATOR###',
+        decimalDigits: 0,
+      );
+    } else if (THOUSAND_SEPARATOR == " ") {
+      numberFormat = NumberFormat.currency(
+        locale: 'fr',
+        customPattern: '#,###',
+        decimalDigits: 0,
+      );
     }
     return numberFormat!;
   }
 
-
   static void navigateToRoute({
     required context,
-    required WidgetBuilder builder
-  }){
+    required WidgetBuilder builder,
+  }) {
     Route pageRoute = MaterialPageRoute(builder: builder);
     Navigator.push(context, pageRoute);
-
   }
 
   static void navigateToRouteByReplacement({
     required context,
-    required WidgetBuilder builder
-  }){
+    required WidgetBuilder builder,
+  }) {
     Route pageRoute = MaterialPageRoute(builder: builder);
     Navigator.pushReplacement(context, pageRoute);
   }
 
   static void navigateToRouteByPushAndRemoveUntil({
     required context,
-    required WidgetBuilder builder
-  }){
+    required WidgetBuilder builder,
+  }) {
     Route pageRoute = MaterialPageRoute(builder: builder);
     Navigator.pushAndRemoveUntil(context, pageRoute, (route) => false);
     // Navigator.of(context).pushAndRemoveUntil(pageRoute, (Route<dynamic> route) => false);
   }
 
-
-  static MaterialColor getMaterialColor(String hexValue){
+  static MaterialColor getMaterialColor(String hexValue) {
     int? colorValue;
 
-    if(hexValue.contains("#")){
+    if (hexValue.contains("#")) {
       colorValue = int.parse(hexValue.substring(1), radix: 16);
     }
 
@@ -117,9 +126,9 @@ class UtilityMethods{
     return materialColor;
   }
 
-  static Color getColorFromString(String hexValue){
+  static Color getColorFromString(String hexValue) {
     int? colorValue;
-    if(hexValue.contains("#")){
+    if (hexValue.contains("#")) {
       colorValue = int.parse(hexValue.substring(1), radix: 16);
     }
     return Color(colorValue!);
@@ -137,21 +146,22 @@ class UtilityMethods{
     return text.hasMatch(str);
   }
 
-
-
   /// Returns true if 'inputItem' is not null and non-empty String.
-  static bool isValidString(dynamic inputItem){
-    if(inputItem is String && inputItem.isNotEmpty){
+  static bool isValidString(dynamic inputItem) {
+    if (inputItem is String && inputItem.isNotEmpty) {
       return true;
     }
     return false;
   }
 
-  static getRandomNumber({int? maxRange}){
+  static getRandomNumber({int? maxRange}) {
     return Random().nextInt(maxRange ?? 1000);
   }
 
-  static String getTimeAgoFormat({required String? time, String? locale = 'en'}) {
+  static String getTimeAgoFormat({
+    required String? time,
+    String? locale = 'en',
+  }) {
     if (time != null && time.isNotEmpty) {
       DateTime dt = DateTime.parse(time + "z");
       String lang = HiveStorageManager.readLanguageSelection() ?? "en";
@@ -202,10 +212,10 @@ class UtilityMethods{
     timeago.setLocaleMessages('zh', timeago.ZhMessages());
   }
 
-
-
-  static String getStringFromList(List<String>? dataList,
-      { String splitPattern = "," }) {
+  static String getStringFromList(
+    List<String>? dataList, {
+    String splitPattern = ",",
+  }) {
     String dataString = "";
 
     if (dataList != null && dataList.isNotEmpty) {
@@ -216,19 +226,16 @@ class UtilityMethods{
     return dataString;
   }
 
-
-
-
-
   static String getFormattedDate(String? gmtDate) {
     String sanitizedDate = "";
     if (gmtDate != null && gmtDate.isNotEmpty) {
       DateTime dateTime = DateTime.parse(gmtDate);
-      sanitizedDate = DateFormat.yMMMMd(HiveStorageManager.readLanguageSelection() ?? 'en').format(dateTime);
+      sanitizedDate = DateFormat.yMMMMd(
+        HiveStorageManager.readLanguageSelection() ?? 'en',
+      ).format(dateTime);
     }
     return sanitizedDate;
   }
-
 
   static String formatPercentage(int percentage) {
     if (percentage > 0) {
@@ -240,22 +247,18 @@ class UtilityMethods{
     }
   }
 
-
-
   static void printAttentionMessage(String reason) {
     print("***************************************************************");
-
   }
 
-
-
   static String get _getDeviceType {
-
     // final double physicalWidth = WidgetsBinding.instance.platformDispatcher.views.first.physicalSize.width;
     // final double devicePixelRatio =
     //     WidgetsBinding.instance.platformDispatcher.views.first.devicePixelRatio;
     // final double width = physicalWidth / devicePixelRatio;
-    final data = MediaQueryData.fromView(WidgetsBinding.instance.platformDispatcher.views.single);
+    final data = MediaQueryData.fromView(
+      WidgetsBinding.instance.platformDispatcher.views.single,
+    );
     //print("window shortest size ${data.size.shortestSide}");
     return data.size.shortestSide < 700 ? 'phone' : 'tablet';
   }
@@ -268,33 +271,31 @@ class UtilityMethods{
     return (Platform.isIOS && isTablet);
   }
 
-
-
   static TextInputType getKeyboardType(String? type) {
-    if(type == textKeyboardType) {
+    if (type == textKeyboardType) {
       return TextInputType.text;
-    } else if(type == numberKeyboardType) {
+    } else if (type == numberKeyboardType) {
       return TextInputType.number;
-    } else if(type == urlKeyboardType) {
+    } else if (type == urlKeyboardType) {
       return TextInputType.url;
-    } else if(type == emailKeyboardType) {
+    } else if (type == emailKeyboardType) {
       return TextInputType.emailAddress;
-    } else if(type == multilineKeyboardType) {
+    } else if (type == multilineKeyboardType) {
       return TextInputType.multiline;
     }
     return TextInputType.text;
   }
 
   static String getStringKeyboardType(TextInputType? type) {
-    if(type == TextInputType.text) {
+    if (type == TextInputType.text) {
       return textKeyboardType;
-    } else if(type == TextInputType.number) {
+    } else if (type == TextInputType.number) {
       return numberKeyboardType;
-    } else if(type == TextInputType.url) {
+    } else if (type == TextInputType.url) {
       return urlKeyboardType;
-    } else if(type == TextInputType.emailAddress) {
+    } else if (type == TextInputType.emailAddress) {
       return emailKeyboardType;
-    } else if(type == TextInputType.multiline) {
+    } else if (type == TextInputType.multiline) {
       return multilineKeyboardType;
     }
     return textKeyboardType;
@@ -302,10 +303,21 @@ class UtilityMethods{
 
   static Map<String, dynamic> bottomNavBarMap() {
     return {
-      "Battery": Icons.battery_charging_full,
-      "Monitor": Icons.monitor,
-      "Device Info": Icons.info,
-      "App Info": Icons.apps,
+      // Alternative for Icons.electric_bolt
+      // Alternative for Icons.battery_4_bar
+      "Battery": Icons.battery_full_rounded,
+      // Alternative for real-time monitoring vibe: Icons.graphic_eq_rounded
+      // Alternative for speed/performance vibe: Icons.speed_rounded
+      // Alternative for Icons.developer_board,
+      // Alternative for Icons.dashboard
+      "Performance": Icons.graphic_eq_rounded,
+      // Alternative for Icons.memory
+      // Alternative for Icons.devices
+      "Device": Icons.smartphone_rounded,
+      // 'info_outline' usually looks cleaner than filled 'info' for navbar
+      // Alternative for Icons.settings_applications
+      // Alternative for Icons.info
+      "About": Icons.info_outline_rounded,
     };
   }
 }

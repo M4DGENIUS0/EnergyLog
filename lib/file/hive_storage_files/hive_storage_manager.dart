@@ -199,6 +199,19 @@ class HiveStorageManager {
     deleteData(key: CHANGE_POWER_UNIT_KEY);
   }
 
+  /// Store Notification Formats
+  static storeNotificationFormat(List<String> data) {
+    saveData(key: CHANGE_NOTIFICATION_FORMAT_KEY, data: data);
+  }
+
+  static readNotificationFormat() {
+    return readData(key: CHANGE_NOTIFICATION_FORMAT_KEY);
+  }
+
+  static deletedNotificationFormat() {
+    deleteData(key: CHANGE_NOTIFICATION_FORMAT_KEY);
+  }
+
   /// Delete All Store Data
   static deleteAllData() {
     deleteData(key: APP_URL);

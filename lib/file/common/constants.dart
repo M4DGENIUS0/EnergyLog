@@ -77,6 +77,7 @@ const String HIVE_BOX = 'Hive_Storage_Box_V1';
 const String IS_NOTIFICATION_ENABLED_KEY = "notifications_enabled";
 const String CHANGE_TEMPRETURE_UNIT_KEY = "temp_unit_celsius";
 const String CHANGE_POWER_UNIT_KEY = "power_unit_watts";
+const String CHANGE_NOTIFICATION_FORMAT_KEY = "notification_format";
 
 const String APP_CONFIG_JSON_PATH = "assets/configurations/configurations.json";
 

@@ -9,8 +9,6 @@ import 'package:app/widgets/settings_widget/dark_mode_setting.dart';
 import 'package:app/widgets/settings_widget/language_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:app/file/hive_storage_files/hive_storage_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -103,18 +101,19 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
                 padding: const EdgeInsets.only(top: 20.0),
                 child: Column(
                   children: [
-                    appSettingWidget(),
+                    appNotificationCard(),
                     Container(height: 20.0),
-                    preferencesWidget(),
+                    appThemeCard(),
                     Container(height: 20.0),
-
+                    appStanderdCard(),
+                    Container(height: 20.0),
+                    appStanderdCard(),
+                    Container(height: 20.0),
+                    appAboutLegalCard(),
                     Container(height: 40.0),
                   ],
                 ),
-              )
-
-
-
+              ),
             ],
           ),
         ),
@@ -122,16 +121,17 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
     );
   }
 
-  Widget appSettingWidget() {
+  /// Card Regarding Notification!
+  Widget appNotificationCard() {
     return CardWidget(
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
       ),
       color: APP_DARK_COLOR,
       child: GenericSettingsWidget(
-        headingText: UtilityMethods.getLocalizedString("preference"),
+        headingText: UtilityMethods.getLocalizedString("Notifications"),
         headingSubTitleText: UtilityMethods.getLocalizedString(
-          "customise_your_experience_on_app",
+          "notification_format_description",
         ),
         removeDecoration: true,
         body: Column(
@@ -143,11 +143,9 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               text: UtilityMethods.getLocalizedString("enable_notification"),
               removeDecoration: false,
               switchButtonEnabled: true,
-              // switchButtonText: ,
               switchButtonValue: notificationsEnabled,
               onTapSwitch: (v) async {
                 if (v) {
-                  // User wants to enable notifications
                   var status = await Permission.notification.status;
                   if (status.isGranted) {
                     setState(() {
@@ -186,41 +184,8 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
             GenericWidgetRow(
               iconData: AppThemePreferences.darkModeIcon,
               text: UtilityMethods.getLocalizedString("notification_format"),
-              removeDecoration: false,
+              removeDecoration: true,
               onTap: () => onNotificationSettingsTap(context),
-            ),
-            GenericWidgetRow(
-              // iconData: AppThemePreferences.notificationIcon,
-              iconData: Icons.electric_bolt,
-              text: UtilityMethods.getLocalizedString(
-                "Power Unit (${isWatts ? 'W' : 'mW'})",
-              ),
-              switchButtonEnabled: true,
-              // switchButtonText: ,
-              switchButtonValue: isWatts,
-              onTapSwitch: (v) {
-                setState(() {
-                  isWatts = v;
-                });
-                HiveStorageManager.storePowerUnit(v);
-              },
-            ),
-
-            GenericWidgetRow(
-              // iconData: AppThemePreferences.notificationIcon,
-              iconData: Icons.thermostat,
-              text: UtilityMethods.getLocalizedString(
-                "Temperature Unit (${isCelsius ? '°C' : '°F'})",
-              ),
-              switchButtonEnabled: true,
-              // switchButtonText: ,
-              switchButtonValue: isCelsius,
-              onTapSwitch: (v) {
-                setState(() {
-                  isCelsius = v;
-                });
-                HiveStorageManager.storeChangeTempretureUnit(v);
-              },
             ),
           ],
         ),
@@ -228,7 +193,8 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
     );
   }
 
-  Widget preferencesWidget() {
+  /// Card Regarding Theme
+  Widget appThemeCard() {
     return CardWidget(
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
@@ -258,6 +224,135 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               text: UtilityMethods.getLocalizedString("language_label"),
               removeDecoration: true,
               onTap: () => onLanguageSettingsTap(context),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget appStanderdCard() {
+    return CardWidget(
+      shape: AppThemePreferences.roundedCorners(
+        AppThemePreferences.globalRoundedCornersRadius,
+      ),
+      color: APP_DARK_COLOR,
+      child: GenericSettingsWidget(
+        headingText: UtilityMethods.getLocalizedString("standerd"),
+        headingSubTitleText: UtilityMethods.getLocalizedString(
+          "standerd_description",
+        ),
+        removeDecoration: true,
+        body: Column(
+          crossAxisAlignment: .start,
+
+          children: [
+            GenericWidgetRow(
+              // iconData: AppThemePreferences.notificationIcon,
+              iconData: Icons.electric_bolt,
+              text: UtilityMethods.getLocalizedString(
+                "Power Unit (${isWatts ? 'W' : 'mW'})",
+              ),
+              switchButtonEnabled: true,
+              // switchButtonText: ,
+              switchButtonValue: isWatts,
+              onTapSwitch: (v) {
+                setState(() {
+                  isWatts = v;
+                });
+                HiveStorageManager.storePowerUnit(v);
+              },
+            ),
+
+            GenericWidgetRow(
+              // iconData: AppThemePreferences.notificationIcon,
+              iconData: Icons.thermostat,
+              text: UtilityMethods.getLocalizedString(
+                "Temperature Unit (${isCelsius ? '°C' : '°F'})",
+              ),
+              removeDecoration: true,
+              switchButtonEnabled: true,
+              // switchButtonText: ,
+              switchButtonValue: isCelsius,
+              onTapSwitch: (v) {
+                setState(() {
+                  isCelsius = v;
+                });
+                HiveStorageManager.storeChangeTempretureUnit(v);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget appAboutLegalCard() {
+    return CardWidget(
+      shape: AppThemePreferences.roundedCorners(
+        AppThemePreferences.globalRoundedCornersRadius,
+      ),
+      color: APP_DARK_COLOR,
+      child: GenericSettingsWidget(
+        enableBottomDecoration: false,
+        headingText: UtilityMethods.getLocalizedString("about_legal"),
+        headingSubTitleText: UtilityMethods.getLocalizedString(
+          "View the privacy policy, terms of service, and version info.",
+        ),
+        // headingSubTitleText: AppLocalizations.of(context).customise_your_experience_on_app(appName),
+        removeDecoration: true,
+
+        body: Column(
+          crossAxisAlignment: .start,
+          spacing: 10,
+          children: [
+            GenericWidgetRow(
+              iconData: Icons.privacy_tip,
+              text: UtilityMethods.getLocalizedString("privacy_policy"),
+              removeDecoration: false,
+              onTap: () {},
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: Icons.description,
+              text: UtilityMethods.getLocalizedString("terms_conditions"),
+              removeDecoration: false,
+              onTap: () {},
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: Icons.article,
+              text: UtilityMethods.getLocalizedString("license"),
+              removeDecoration: false,
+              onTap: () {},
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: Icons.bug_report,
+              text: UtilityMethods.getLocalizedString("raise_issue"),
+              removeDecoration: false,
+              onTap: () {},
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: Icons.lightbulb,
+              text: UtilityMethods.getLocalizedString("request_a_feature"),
+              removeDecoration: false,
+              onTap: () {},
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: Icons.star,
+              text: UtilityMethods.getLocalizedString("rate_app"),
+              removeDecoration: false,
+              onTap: () {},
+            ),
+            GenericWidgetRow(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+              iconData: Icons.share,
+              text: UtilityMethods.getLocalizedString("share_app"),
+              removeDecoration: true,
+              onTap: () {},
             ),
           ],
         ),
