@@ -12,6 +12,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:app/file/hive_storage_files/hive_storage_manager.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AppInfoScreen extends StatefulWidget {
   const AppInfoScreen({super.key});
@@ -121,7 +122,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
     );
   }
 
-  Widget appSettingWidget(){
+  Widget appSettingWidget() {
     return CardWidget(
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
@@ -139,25 +140,54 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
           children: [
             GenericWidgetRow(
               iconData: AppThemePreferences.notificationIcon,
-              text: UtilityMethods.getLocalizedString(
-                "enable_notification",
-              ),
+              text: UtilityMethods.getLocalizedString("enable_notification"),
               removeDecoration: false,
               switchButtonEnabled: true,
               // switchButtonText: ,
               switchButtonValue: notificationsEnabled,
-              onTapSwitch: (v) {
-                setState(() {
-                  notificationsEnabled = v;
-                });
-                HiveStorageManager.storeNotificationEnabled(v);
+              onTapSwitch: (v) async {
+                if (v) {
+                  // User wants to enable notifications
+                  var status = await Permission.notification.status;
+                  if (status.isGranted) {
+                    setState(() {
+                      notificationsEnabled = true;
+                    });
+                    HiveStorageManager.storeNotificationEnabled(true);
+                  } else if (status.isDenied) {
+                    var result = await Permission.notification.request();
+                    if (result.isGranted) {
+                      setState(() {
+                        notificationsEnabled = true;
+                      });
+                      HiveStorageManager.storeNotificationEnabled(true);
+                    } else {
+                      // Permission denied, keep switch off
+                      setState(() {
+                        notificationsEnabled = false;
+                      });
+                    }
+                  } else if (status.isPermanentlyDenied) {
+                    // Open settings if permanently denied
+                    openAppSettings();
+                    setState(() {
+                      notificationsEnabled = false;
+                    });
+                  }
+                } else {
+                  // User wants to disable notifications
+                  setState(() {
+                    notificationsEnabled = false;
+                  });
+                  HiveStorageManager.storeNotificationEnabled(false);
+                }
               },
             ),
             GenericWidgetRow(
               iconData: AppThemePreferences.darkModeIcon,
               text: UtilityMethods.getLocalizedString("notification_format"),
               removeDecoration: false,
-              onTap: ()=> onNotificationSettingsTap(context),
+              onTap: () => onNotificationSettingsTap(context),
             ),
             GenericWidgetRow(
               // iconData: AppThemePreferences.notificationIcon,
@@ -173,7 +203,6 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
                   isWatts = v;
                 });
                 HiveStorageManager.storePowerUnit(v);
-
               },
             ),
 
@@ -193,14 +222,13 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
                 HiveStorageManager.storeChangeTempretureUnit(v);
               },
             ),
-
           ],
         ),
       ),
     );
   }
 
-  Widget preferencesWidget(){
+  Widget preferencesWidget() {
     return CardWidget(
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
@@ -209,7 +237,9 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
       child: GenericSettingsWidget(
         enableBottomDecoration: false,
         headingText: UtilityMethods.getLocalizedString("preference"),
-        headingSubTitleText: UtilityMethods.getLocalizedString("customise_your_experience_on_app", ),
+        headingSubTitleText: UtilityMethods.getLocalizedString(
+          "customise_your_experience_on_app",
+        ),
         // headingSubTitleText: AppLocalizations.of(context).customise_your_experience_on_app(appName),
         removeDecoration: true,
 
@@ -220,38 +250,36 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               iconData: AppThemePreferences.darkModeIcon,
               text: UtilityMethods.getLocalizedString("dark_mode"),
               removeDecoration: false,
-              onTap: ()=> onDarkModeSettingsTap(context),
+              onTap: () => onDarkModeSettingsTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
               iconData: AppThemePreferences.languageIcon,
               text: UtilityMethods.getLocalizedString("language_label"),
               removeDecoration: true,
-              onTap: ()=> onLanguageSettingsTap(context),
+              onTap: () => onLanguageSettingsTap(context),
             ),
-
-
           ],
         ),
       ),
     );
   }
 
-  void onNotificationSettingsTap(BuildContext context){
+  void onNotificationSettingsTap(BuildContext context) {
     UtilityMethods.navigateToRoute(
       context: context,
       builder: (context) => NotificationFormatSettings(),
     );
   }
 
-  void onDarkModeSettingsTap(BuildContext context){
+  void onDarkModeSettingsTap(BuildContext context) {
     UtilityMethods.navigateToRoute(
       context: context,
       builder: (context) => DarkModeSettings(),
     );
   }
 
-  void onLanguageSettingsTap(BuildContext context){
+  void onLanguageSettingsTap(BuildContext context) {
     UtilityMethods.navigateToRoute(
       context: context,
       builder: (context) => LanguageSettings(),
