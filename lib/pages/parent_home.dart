@@ -2,6 +2,7 @@ import 'package:app/file/app_preferences/app_preferences.dart';
 import 'package:app/file/common/constants.dart';
 import 'package:app/file/generic_methods/utility_methods.dart';
 import 'package:app/file/hive_storage_files/hive_storage_manager.dart';
+import 'package:app/file/theme_service_files/theme_notifier.dart';
 import 'package:app/pages/home_related/battery_screen.dart';
 import 'package:app/pages/home_related/device_info.dart';
 import 'package:app/pages/home_related/parent_home_utilities.dart';
@@ -12,7 +13,7 @@ import 'package:app/widgets/custom_widgets/refresh_indicator_widget.dart';
 import 'package:app/widgets/no_internet_botton_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:app/pages/home_related/app_info_screen.dart';
+import 'package:app/pages/home_related/about_settings.dart';
 
 class ParentHome extends StatefulWidget {
   const ParentHome({super.key});
@@ -29,7 +30,15 @@ class _ParentHomeState extends State<ParentHome> {
       clearMetaData();
       // needToRefresh = true;
     });
-    // loadData();
+  }
+
+  @override
+  void initState() {
+    AppThemePreferences().dark(ThemeNotifier().isDarkMode());
+    ThemeNotifier().addListener(
+            () => AppThemePreferences().dark(ThemeNotifier().isDarkMode()));
+
+    super.initState();
   }
 
   final List<Widget> _pages = [
@@ -54,22 +63,6 @@ class _ParentHomeState extends State<ParentHome> {
         },
         child: Scaffold(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          // drawer: HomeScreenDrawerWidget(
-          //   drawerConfigDataList: drawerConfigList,
-          //   userInfoData: {
-          //     USER_PROFILE_NAME : _userName,
-          //     USER_PROFILE_IMAGE : _userImage,
-          //     USER_ROLE : _userRole,
-          //     USER_LOGGED_IN : isLoggedIn,
-          //   },
-          //   homeScreenDrawerWidgetListener: (bool loginInfo){
-          //     if(mounted){
-          //       setState(() {
-          //         isLoggedIn = loginInfo;
-          //       });
-          //     }
-          //   },
-          // ),
           body: IndexedStack(index: _selectedIndex, children: _pages),
           bottomNavigationBar: bottomNavigationBar(),
         ),
@@ -129,8 +122,7 @@ class _ParentHomeState extends State<ParentHome> {
     return BottomNavigationBarWidget(
       backgroundColor:
           AppThemePreferences().appTheme.bottomNavBarBackgroundColor!,
-      // selectedItemColor: AppThemePreferences().appTheme.bottomNavigationBarSelectedItemColor!,
-      selectedItemColor: AppThemePreferences().appTheme.primaryColor,
+      selectedItemColor: AppThemePreferences().appTheme.bottomNavigationBarSelectedItemColor!,
       unselectedItemColor: AppThemePreferences()
           .appTheme
           .bottomNavigationBarUnSelectedItemColor!,

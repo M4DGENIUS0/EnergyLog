@@ -94,6 +94,7 @@ class AppThemePreferences{
   static double locationWidgetFontSize = 17.0;
   static double tabBarTitleFontSize = 15.0;
   static double realtorPageTabBarTitleFontSize = 14.0;
+  static double infoCardTitleTextSize = 14.0;
   static double filterPageChoiceChipFontSize = 13.0;
   static double rangeSliderWidgetConversionUnitFontSize = normalFontSize;
   static double bottomSheetMenuTitleFontSize = 25.0;
@@ -109,7 +110,9 @@ class AppThemePreferences{
   static double propertyDetailsPagePropertyPriceFontSize = 18.0;
   static double propertyDetailsPagePropertyDetailFeaturesFontSize = normalFontSize;
   static double genericStatusBarTextFontSize = 18.0;
-  static double cityPickerTextFontSize = 16.0;
+  static double requestPermissionTextFontSize = 16.0;
+  static double genericInfoCardHighlightTextSize = 22.0;
+  static double batteryUsageCardTileIconSize = 16.0;
   static double genericAppBarTextFontSize = 25.0;
   static double genericTabBarTextFontSize = 18.0;
   static double formFieldErrorTextFontSize = 12.0;
@@ -138,7 +141,7 @@ class AppThemePreferences{
   static double bottomActionBarFontSize = 12.0;
   static double membershipTitleFontSize = 16.0;
   static double batteryStatusHeadingFontSize = 70.0;
-  static double membershipPackageNameFontSize = 20.0;
+  static double batteryStatusSubTextFontSize = 15.0;
   static double membershipExpireFontSize = 17.0;
   static double privateNoteFontSize = 20.0;
   static double blogLayoutCategoryFontSize = 16.0;
@@ -598,8 +601,9 @@ class AppThemePreferences{
   static Color propertyDetailsPagePropertyStatusColorLight = appSecondaryColor;
   static Color? propertyDetailsPagePropertyPriceColorLight = normalTextColorLight;
   static Color genericStatusBarTextColorLight = Colors.white;
-  static Color genericAppBarTextColorLight = Colors.white;
-  static Color genericTabBarTextColorLight = Colors.white;
+  static Color genericAppBarTextColorLight = Colors.black;
+  static Color genericTabBarTextColorLight = Colors.black;
+  static Color refreshIconColorLight = Colors.black;
   static Color? appInfoTextColorLight = Colors.grey[600];
   static Color hintColorLight = Colors.black54;
   static Color facebookSignInButtonTextColorLight = Colors.white;
@@ -620,7 +624,8 @@ class AppThemePreferences{
   static Color? activityHeadingTextColorLight = Colors.black;
   static Color? membershipTitleTextColorLight = Colors.black;
   static Color? membershipPriceTextColorLight = Colors.black;
-  static Color? membershipPackageNameTextColorLight = Colors.black;
+  static Color? batteryStatusTextColorLight = Colors.black;
+  static Color? batteryStatusSubTextColorLight = Colors.black38;
   static Color? membershipExpireTextColorLight = Colors.grey[700];
   static Color? cupertinoSegmentThumbColorLight = Colors.white;
   static Color? privateNoteColorLight = Colors.black;
@@ -665,6 +670,13 @@ class AppThemePreferences{
   ///
   /// Background color
   static Color backgroundColorLight =  Colors.white;
+  ///
+  /// Generic Info Card Light Color
+  static Color genericInfoCardColorLight = APP_LIGHT_COLOR;
+  ///
+  /// Generic Info Card Light Color
+  static Color genericBorderColorLight = Color(0xFFF2F2F2);
+  ///
   ///
   /// Divider color
   // static Color dividerColorLight =  Color(0x1F000000);
@@ -728,8 +740,17 @@ class AppThemePreferences{
   /// Article Box Icons color
   static Color articleBoxIconsColorLight = appSecondaryColor;
   ///
-  /// Filter Page Icons color
-  static Color filterPageIconsColorLight = appSecondaryColor;
+  /// Arrow Forward Icons color
+  static Color arrowForwardIconsColorLight = Colors.deepOrange;
+  ///
+  /// Request Permission Text color
+  static Color requestPermissionsTextColorLight = Colors.deepOrange;
+  ///
+  /// Highlight Color for Info card Color light
+  static Color genericInfoCardHighlightTextColorLight = Colors.black;
+  ///
+  /// Generic Info Card Title Text color
+  static Color genericInfoCardTitleTextColorLight =  Colors.black38;
   ///
   /// Location Widget Text color
   static Color locationWidgetTextColorLight = appSecondaryColor;
@@ -771,7 +792,7 @@ class AppThemePreferences{
   static Color googleSignInButtonColorLight = Colors.white;
   ///
   /// Apple Sign-In Button Background color
-  static Color appleSignInButtonColorLight = Colors.black;
+  static Color circularGuageBackgroundColorLight = APP_LIGHT_COLOR;
   ///
   /// Search Page Choice chips Background color
   static Color? searchPageChoiceChipsBackgroundColorLight = Colors.grey[100];
@@ -888,6 +909,7 @@ class AppThemePreferences{
   static Color? genericStatusBarTextColorDark = Colors.grey[400];
   static Color? genericAppBarTextColorDark = Colors.grey[300];
   static Color? genericTabBarTextColorDark = Colors.grey[300];
+  static Color? refreshIconColorDark = Colors.white70;
   static Color hintColorDark = Colors.grey;
   static Color? appInfoTextColorDark = Colors.grey[600];
   static Color? facebookSignInButtonTextColorDark = normalTextColorDark;
@@ -904,8 +926,8 @@ class AppThemePreferences{
   static Color? crmNormalTextColorDark = normalTextColorDark;
   static Color? crmIconColorDark = normalTextColorDark;
   static Color? membershipTitleTextColorDark = normalTextColorDark;
-  static Color? membershipPriceTextColorDark = normalTextColorDark;
-  static Color? membershipPackageNameTextColorDark = normalTextColorDark;
+  static Color? batteryStatusTextColorDark = normalTextColorDark;
+  static Color? batteryStatusSubTextColorDark = Colors.grey;
   static Color? membershipExpireTextColorDark = normalTextColorDark;
   static Color? cupertinoSegmentThumbColorDark = normalTextColorDark;
   static Color? privateNoteColorDark = normalTextColorDark;
@@ -941,7 +963,14 @@ class AppThemePreferences{
   // static Color sliverAppBarBackgroundColorDark =  Colors.white24;
   ///
   /// Background color
-  static Color backgroundColorDark =  const Color(0xFF18191B);
+  static Color backgroundColorDark =  APP_SECONDARY_COLOR;
+  ///
+  /// Generic Info Card Dark Color
+  static Color genericInfoCardColorDark = APP_DARK_COLOR;
+  ///
+  /// generic Border Color
+  static Color genericBorderColorDark = Color(0xFF2A2A2A);
+  ///
   // static Color backgroundColorDark =  Colors.black;
   ///
   /// Divider color
@@ -1012,8 +1041,16 @@ class AppThemePreferences{
   // static Color articleBoxIconsColorDark = appPrimaryColor;
   ///
   /// Filter Page Icons color
-  static Color filterPageIconsColorDark = appIconsMasterColorDark;
-
+  static Color arrowForwardIconsColorDark = Colors.orangeAccent;
+  ///
+  /// Request Permission Text color
+  static Color requestPermissionTextColorDark = Colors.orangeAccent;
+  ///
+  /// Request Permission Text color
+  static Color genericInfoCardTitleTextColorDark = Colors.white70;
+  ///
+  /// 
+  static Color genericInfoCardHighlightTextColorDark = Colors.white;
   // static Color filterPageIconsColorDark = Colors.grey;
   ///
   /// Location Widget Text color
@@ -1075,7 +1112,7 @@ class AppThemePreferences{
   static Color googleSignInButtonColorDark = cardColorDark;
   ///
   /// Apple Sign-In Button Background color
-  static Color appleSignInButtonColorDark = cardColorDark;
+  static Color circularGuageBackgroundColorDark = APP_DARK_COLOR;
   ///
   /// Search Page Choice chips Background color
   static Color searchPageChoiceChipsBackgroundColorDark = Colors.white10;
@@ -1169,7 +1206,7 @@ class AppThemePreferences{
   /// Icon Sizes:
   static double normalIconSize = 24.0;
   static double homeScreenTopBarLocationIconSize = 30.0;
-  static double homeScreenTopBarLocationFilledIconSize = 20.0;
+  static double genericBackButtonIconSize = 20.0;
   static double homeScreenTopBarRightArrowIconSize = 14.0;
   static double homeScreenTopBarDownArrowIconSize = 18.0;
   static double propertyDetailPageRightArrowIconSize = 20.0;
@@ -1187,7 +1224,7 @@ class AppThemePreferences{
   static double filterPageTermPickerIconSize = 30.0;
   static double filterPageStringPickerIconSize = 30.0;
   static double filterPageRangePickerIconSize = 30.0;
-  static double filterPageArrowForwardIconSize = 20.0;
+  static double arrowForwardIconSize = 14.0;
   static double filterPageLocationCityIconSize = 30.0;
   static double filterPageArrowDropDownIconSize = 30.0;
   static double bottomNavigationMenuIconSize = 35.0;
@@ -1218,7 +1255,7 @@ class AppThemePreferences{
   /// These are new one
   ///
   /// Checked Icon
-  static double checkIconSize = 12.0;
+  static double checkIconSize = 25.0;
   ///
   /// Canvas height for the mockup editor.
   final double defaultCanvasHeight = 600.0;
@@ -1253,7 +1290,31 @@ class AppThemePreferences{
   static IconData drawerMenuIcon = Icons.menu_outlined;
   ///
   /// Location Icon
-  static IconData locationIcon = Icons.location_on_outlined;
+  static IconData voltageIcon = Icons.flash_on_outlined;
+  ///
+  /// Temperature Icon
+  static IconData temperatureIcon = Icons.device_thermostat_outlined;
+  ///
+  /// Health Safty Icon
+  static IconData healthSafetyIcon = Icons.health_and_safety;
+  ///
+  /// Refresh Icon
+  static IconData refreshIconData = Icons.refresh;
+  ///
+  /// Privacy Tipes Icon
+  static IconData privacyTipsIcon = Icons.privacy_tip_outlined;
+  ///
+  /// Electric Bolt Icon
+  static IconData electricBoltIcon = Icons.electric_bolt_outlined;
+  ///
+  /// Screen Rotate lock icon
+  static IconData screenLockIcon = Icons.screen_lock_portrait;
+  ///
+  /// Report a bug Icon
+  static IconData bugReportIcon = Icons.bug_report_outlined;
+  ///
+  /// Get a idea bulb icon
+  static IconData bulbIcon = Icons.lightbulb_outline_rounded;
   ///
   /// Location Icon
   static IconData locationFilledIcon = Icons.fmd_good;
@@ -1386,6 +1447,9 @@ class AppThemePreferences{
   ///
   /// Star Outlined Icon
   static IconData starOutlinedIcon = Icons.star_outline_outlined;
+  ///
+  /// Share Icon
+  static IconData shareIconOutlined = Icons.share_outlined;
   ///
   /// Star Filled Icon
   static IconData starFilledIcon = Icons.star;
@@ -2086,7 +2150,12 @@ class AppTheme{
     _settingHeadingSubTitleTextStyle = TextStyle(fontSize: AppThemePreferences.settingHeadingSubtitleTextFontSize, fontWeight: AppThemePreferences.settingHeadingSubtitleTextFontWeight, height: AppThemePreferences.settingHeadingSubtitleTextHeight, color: isDark ? AppThemePreferences.normalTextColorDark : AppThemePreferences.normalTextColorLight);
     _aboutPageHeadingTextStyle = TextStyle(fontSize: AppThemePreferences.aboutPageHeadingTextFontSize, fontWeight: AppThemePreferences.aboutPageHeadingTextFontWeight, color: isDark ? AppThemePreferences.normalTextColorDark : AppThemePreferences.normalTextColorLight);
     _genericAppBarTextStyle = TextStyle(fontSize: AppThemePreferences.genericAppBarTextFontSize, fontWeight: AppThemePreferences.genericAppBarTextFontWeight, color: isDark ? AppThemePreferences.genericAppBarTextColorDark : AppThemePreferences.genericAppBarTextColorLight);
-    _genericTabBarTextStyle = TextStyle(fontSize: AppThemePreferences.genericTabBarTextFontSize, fontWeight: AppThemePreferences.genericTabBarTextFontWeight, color: isDark ? AppThemePreferences.genericTabBarTextColorDark : AppThemePreferences.genericTabBarTextColorLight);
+    _requestPermissionTextStyle = TextStyle(fontSize: AppThemePreferences.requestPermissionTextFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.requestPermissionTextColorDark : AppThemePreferences.requestPermissionsTextColorLight,);
+    _genericInfoCardTitleTextStyle = TextStyle(color: isDark ? AppThemePreferences.genericInfoCardTitleTextColorDark : AppThemePreferences.genericInfoCardTitleTextColorLight, fontSize: AppThemePreferences.infoCardTitleTextSize);
+    // _screenTimeTitleTextStyle =  TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white,);
+    _batteryUsageCardTileTextStyle = TextStyle(color: isDark ? AppThemePreferences.genericInfoCardHighlightTextColorDark : AppThemePreferences.genericInfoCardHighlightTextColorLight, fontSize: AppThemePreferences.batteryUsageCardTileIconSize, fontWeight: FontWeight.bold,);
+    _genericInfoCardHighlightTextStyle = TextStyle(fontSize: AppThemePreferences.genericInfoCardHighlightTextSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.genericInfoCardHighlightTextColorDark : AppThemePreferences.genericInfoCardHighlightTextColorLight);
+    _genericTabBarTextStyle = TextStyle(fontSize: AppThemePreferences.genericTabBarTextFontSize, fontWeight: AppThemePreferences.genericTabBarTextFontWeight, );
     _facebookSignInButtonTextStyle = TextStyle(fontSize: AppThemePreferences.socialLoginTextFontSize, color: isDark ? AppThemePreferences.facebookSignInButtonTextColorDark : AppThemePreferences.facebookSignInButtonTextColorLight);
     _googleSignInButtonTextStyle = TextStyle(fontSize: AppThemePreferences.socialLoginTextFontSize, color: isDark ? AppThemePreferences.googleSignInButtonTextColorDark : AppThemePreferences.googleSignInButtonTextColorLight);
     _appleSignInButtonTextStyle = TextStyle(fontSize: AppThemePreferences.socialLoginTextFontSize, color: isDark ? AppThemePreferences.appleSignInButtonTextColorDark : AppThemePreferences.appleSignInButtonTextColorLight);
@@ -2107,8 +2176,8 @@ class AppTheme{
     _activitySubTitleTextStyle = TextStyle(fontSize: AppThemePreferences.crmActivitySubTitleTextFontSize, color: isDark ? AppThemePreferences.crmNormalTextColorDark : AppThemePreferences.activitySubTitleTextColorLight);
     _activityHeadingTextStyle = TextStyle(fontSize: AppThemePreferences.crmActivityHeadingTextFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.crmNormalTextColorDark : AppThemePreferences.activityHeadingTextColorLight);
     _membershipTitleTextStyle = TextStyle(fontSize: AppThemePreferences.membershipTitleFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.membershipTitleTextColorDark : AppThemePreferences.membershipTitleTextColorLight);
-    _batteryStatusHeadingTextStyle = TextStyle(fontSize: AppThemePreferences.batteryStatusHeadingFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.membershipPriceTextColorDark : AppThemePreferences.membershipPriceTextColorDark);
-    _membershipPackageNameTextStyle = TextStyle(fontSize: AppThemePreferences.membershipPackageNameFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.membershipPackageNameTextColorDark : AppThemePreferences.membershipPackageNameTextColorLight);
+    _batteryStatusHeadingTextStyle = TextStyle(fontSize: AppThemePreferences.batteryStatusHeadingFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.batteryStatusTextColorDark : AppThemePreferences.batteryStatusTextColorLight);
+    _batteryStatusSubTextStyle = TextStyle(fontSize: AppThemePreferences.batteryStatusSubTextFontSize,  color: isDark ? AppThemePreferences.batteryStatusSubTextColorDark : AppThemePreferences.batteryStatusSubTextColorLight);
     _membershipExpireTextStyle = TextStyle(fontSize: AppThemePreferences.membershipExpireFontSize, color: isDark ? AppThemePreferences.membershipExpireTextColorDark : AppThemePreferences.membershipExpireTextColorLight);
     _privateNoteTextStyle = TextStyle(fontSize: AppThemePreferences.privateNoteFontSize, fontWeight: FontWeight.bold, color: isDark ? AppThemePreferences.privateNoteColorDark : AppThemePreferences.privateNoteColorLight);
     _blogLayoutCategoryTextStyle = TextStyle(fontSize: AppThemePreferences.blogLayoutCategoryFontSize, color: AppThemePreferences.blogLayoutCategoryFontColor);
@@ -2131,7 +2200,7 @@ class AppTheme{
     /// Brightness:
     _statusBarBrightness  = isDark ? AppThemePreferences.statusBarIconBrightnessDark : AppThemePreferences.statusBarIconBrightnessLight;
     _statusBarIconBrightness = isDark ? AppThemePreferences.statusBarIconBrightnessLight : AppThemePreferences.statusBarIconBrightnessDark;
-    _genericStatusBarIconBrightness = isDark ? AppThemePreferences.genericStatusBarIconBrightnessLight : AppThemePreferences.genericStatusBarIconBrightnessDark;
+    _genericStatusBarIconBrightness = isDark ? AppThemePreferences.genericStatusBarIconBrightnessDark : AppThemePreferences.genericStatusBarIconBrightnessLight;
     /// SystemUiOverlayStyle:
     _systemUiOverlayStyle = isDark ? AppThemePreferences.systemUiOverlayStyleLight : AppThemePreferences.systemUiOverlayStyleDark;
     /// colors:
@@ -2141,6 +2210,7 @@ class AppTheme{
     _normalTextColor = (isDark ? AppThemePreferences.normalTextColorDark : AppThemePreferences.normalTextColorLight)!;
     _iconsColor = isDark ? AppThemePreferences.appIconsMasterColorDark : AppThemePreferences.appIconsMasterColorLight;
     _genericStatusBarColor = isDark ? AppThemePreferences.genericStatusBarColorDark : AppThemePreferences.genericStatusBarColorLight;
+    _unselectedTabLabelColor = isDark ? AppThemePreferences.genericTabBarTextColorDark : AppThemePreferences.genericTabBarTextColorLight;
     _genericAppBarIconsColor = (isDark ? AppThemePreferences.genericAppBarIconsColorDark : AppThemePreferences.genericAppBarIconsColorLight)!;
     _homeScreenStatusBarColor = (isDark ? AppThemePreferences.homeScreenStatusBarColorDark : AppThemePreferences.homeScreenStatusBarColorLight)!;
     _homeScreen02StatusBarColor = isDark ? AppThemePreferences.homeScreenStatusBarColorDark : AppThemePreferences.homeScreen02StatusBarColorLight;
@@ -2151,7 +2221,8 @@ class AppTheme{
     _sliverAppBarBackgroundColor = (isDark ? AppThemePreferences.sliverAppBarBackgroundColorDark : AppThemePreferences.sliverAppBarBackgroundColorLight)!;
     _sliverAppBar02BackgroundColor = isDark ? AppThemePreferences.sliverAppBarBackgroundColorDark : AppThemePreferences.sliverAppBar02BackgroundColorLight;
     _backgroundColor = isDark ? AppThemePreferences.backgroundColorDark : AppThemePreferences.backgroundColorLight;
-    // _dividerColor = isDark ? AppThemePreferences.dividerColorDark : AppThemePreferences.dividerColorLight;
+    _genericInfoCardColor = isDark ? AppThemePreferences.genericInfoCardColorDark : AppThemePreferences.genericInfoCardColorLight;
+    _genericBorderColor = isDark ? AppThemePreferences.genericBorderColorDark : AppThemePreferences.genericBorderColorLight;
     _dividerColor = isDark ? AppThemePreferences.dividerColorDark : AppThemePreferences.dividerColor;
     _cardColor = isDark ? AppThemePreferences.cardColorDark : AppThemePreferences.cardColorLight;
     _hintColor = isDark ? AppThemePreferences.hintColorDark : AppThemePreferences.hintColorLight;
@@ -2181,13 +2252,13 @@ class AppTheme{
     _favouriteWidgetBackgroundColor = (isDark ? AppThemePreferences.favouriteWidgetBackgroundColorDark : AppThemePreferences.favouriteWidgetBackgroundColorLight)!;
     _facebookSignInButtonColor = isDark ? AppThemePreferences.facebookSignInButtonColorDark : AppThemePreferences.facebookSignInButtonColorLight;
     _googleSignInButtonColor = isDark ? AppThemePreferences.googleSignInButtonColorDark : AppThemePreferences.googleSignInButtonColorLight;
-    _appleSignInButtonColor = isDark ? AppThemePreferences.appleSignInButtonColorDark : AppThemePreferences.appleSignInButtonColorLight;
-    _filterPageIconsColor = isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight;
+    _circularGuageBackgroundColor = isDark ? AppThemePreferences.circularGuageBackgroundColorDark : AppThemePreferences.circularGuageBackgroundColorLight;
+    // _filterPageIconsColor = isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight;
     _homeScreenSearchBarIconColor = isDark ? AppThemePreferences.homeScreenSearchBarIconColorDark : AppThemePreferences.homeScreenSearchBarIconColorLight;
     _searchPageChoiceChipsBackgroundColor = (isDark ? AppThemePreferences.searchPageChoiceChipsBackgroundColorDark : AppThemePreferences.searchPageChoiceChipsBackgroundColorLight)!;
     _homeScreenSearchArrowIconBackgroundColor = isDark ? AppThemePreferences.homeScreenSearchArrowIconBackgroundColorDark : AppThemePreferences.homeScreenSearchArrowIconBackgroundColorLight;
     // print("Value of is dark: $isDark");
-    _bottomNavBarBackgroundColor = isDark ? AppThemePreferences.bottomNavBarBackgroundColorLight : AppThemePreferences. bottomNavBarBackgroundColorDark;
+    _bottomNavBarBackgroundColor = isDark ? AppThemePreferences.bottomNavBarBackgroundColorDark : AppThemePreferences.bottomNavBarBackgroundColorLight;
     _articleDesignItemBackgroundColor = isDark ? AppThemePreferences.articleDesignItemBackgroundColorDark : AppThemePreferences.articleDesignItemBackgroundColorLight;
     _recentSearchesBorderColor = isDark ? AppThemePreferences.recentSearchesBorderColorDark : AppThemePreferences.recentSearchesBorderColorLight;
     _crmIconColor = isDark ? AppThemePreferences.crmIconColorDark : AppThemePreferences.crmIconColorLight;
@@ -2212,14 +2283,22 @@ class AppTheme{
     /// These will going to use.
     _canvasSizeContainerColor = isDark ? AppThemePreferences.canvasSizeContainerColorDark : AppThemePreferences.canvasSizeContainerColorLight;
     _bottomNavigationBarBackgroundColor = (isDark ? AppThemePreferences.bottomNavBarColorDark : AppThemePreferences.bottomNavBarColorLight)!;
-    _bottomNavigationBarSelectedItemColor = (isDark ? AppThemePreferences.bottomNavBarSelectedItemColorDark : AppThemePreferences.bottomNavBarSelectedItemColorLight)!;
+    _bottomNavigationBarSelectedItemColor = AppThemePreferences.appPrimaryColor ;
     _bottomNavigationBarUnSelectedItemColor = (isDark ? AppThemePreferences.bottomNavBarUnSelectedItemColorLight : AppThemePreferences.bottomNavBarUnSelectedItemColorLight)!;
     /// icons:
     /// These all will be remove in future, so don't use them.
+    _voltageIcon = Icon(AppThemePreferences.voltageIcon, color: AppThemePreferences.appPrimaryColor);
+    _tempratureIcon = Icon(AppThemePreferences.temperatureIcon, color: AppThemePreferences.appPrimaryColor);
+    _healthAndSafeIcon = Icon(AppThemePreferences.healthSafetyIcon, color: AppThemePreferences.appPrimaryColor);
+    _refreshIcon = Icon(AppThemePreferences.refreshIconData, color: isDark ? AppThemePreferences.refreshIconColorDark : AppThemePreferences.refreshIconColorLight);
+    _requestPermissionIcon = Icon(AppThemePreferences.arrowForwardIcon, size: AppThemePreferences.arrowForwardIconSize, color: isDark ? AppThemePreferences.arrowForwardIconsColorDark : AppThemePreferences.arrowForwardIconsColorLight,);
+    _powerIcon = Icon(AppThemePreferences.electricBoltIcon, color: AppThemePreferences.appPrimaryColor);
+    _screenTimeIcon = Icon(AppThemePreferences.screenLockIcon, color: AppThemePreferences.appPrimaryColor);
+    _genericBackButtonIcon = Icon(AppThemePreferences.arrowBackIcon, size: AppThemePreferences.genericBackButtonIconSize,color: isDark ? AppThemePreferences.genericAppBarTextColorDark : AppThemePreferences.genericAppBarTextColorLight);
     _drawerMenuIcon = Icon(AppThemePreferences.drawerMenuIcon, color: isDark ? AppThemePreferences.drawerMenuIconColorDark : AppThemePreferences.drawerMenuIconColorLight);
     _drawer02MenuIcon = Icon(AppThemePreferences.drawerMenuIcon, color: isDark ? AppThemePreferences.drawerMenuIconColorDark : AppThemePreferences.drawerMenu02IconColorLight);
-    _homeScreenTopBarLocationIcon = Icon(AppThemePreferences.locationIcon, size: AppThemePreferences.homeScreenTopBarLocationIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarLocationIconColorDark : AppThemePreferences.homeScreenTopBarLocationIconColorLight);
-    _homeScreenTopBarLocationFilledIcon = Icon(AppThemePreferences.locationFilledIcon, size: AppThemePreferences.homeScreenTopBarLocationFilledIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarLocationIconColorDark : AppThemePreferences.homeScreenTopBarLocationIconColorLight);
+    // _homeScreenTopBarLocationIcon = Icon(AppThemePreferences.locationIcon, size: AppThemePreferences.homeScreenTopBarLocationIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarLocationIconColorDark : AppThemePreferences.homeScreenTopBarLocationIconColorLight);
+    // _homeScreenTopBarLocationFilledIcon = Icon(AppThemePreferences.locationFilledIcon, size: AppThemePreferences.homeScreenTopBarLocationFilledIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarLocationIconColorDark : AppThemePreferences.homeScreenTopBarLocationIconColorLight);
     _homeScreenTopBarRightArrowIcon = Icon(AppThemePreferences.rightArrowIcon, size: AppThemePreferences.homeScreenTopBarRightArrowIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarRightArrowIconColorDark : AppThemePreferences.homeScreenTopBarRightArrowIconColorLight);
     _homeScreenTopBarDownArrowIcon = Icon(AppThemePreferences.dropDownArrowIcon, size: AppThemePreferences.homeScreenTopBarDownArrowIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarRightArrowIconColorDark : AppThemePreferences.homeScreenTopBarDownArrowIconColorLight);
     _homeScreenTopBarSearchIcon = Icon(AppThemePreferences.searchIcon, size: AppThemePreferences.homeScreenTopBarSearchIconSize, color: isDark ? AppThemePreferences.homeScreenTopBarSearchIconColorDark : AppThemePreferences.homeScreenTopBarSearchIconColorLight);
@@ -2228,22 +2307,22 @@ class AppTheme{
     _homeScreenSearchBarFilterIcon = Icon(AppThemePreferences.filterIcon, size: AppThemePreferences.homeScreenSearchBarIconSize, color: isDark ? AppThemePreferences.homeScreenSearchBarIconColorDark : AppThemePreferences.homeScreenSearchBarIconColorLight);
     _searchBarIcon = Icon(AppThemePreferences.searchIcon, size: AppThemePreferences.homeScreenSearchBarIconSize, color: isDark ? AppThemePreferences.unSelectedItemTextColorDark : AppThemePreferences.unSelectedItemTextColorLight);
     _shimmerEffectImageErrorIcon = Icon(AppThemePreferences.imageIcon, size: AppThemePreferences.shimmerEffectImageErrorIconSize, color: isDark ? AppThemePreferences.shimmerEffectErrorIconColorDark : AppThemePreferences.shimmerEffectErrorIconColorLight);
-    _articleBoxLocationIcon = Icon(AppThemePreferences.locationIcon, size: AppThemePreferences.articleBoxIconSize, color: isDark ? AppThemePreferences.articleBoxIconsColorDark : AppThemePreferences.articleBoxIconsColorLight);
+    // _articleBoxLocationIcon = Icon(AppThemePreferences.locationIcon, size: AppThemePreferences.articleBoxIconSize, color: isDark ? AppThemePreferences.articleBoxIconsColorDark : AppThemePreferences.articleBoxIconsColorLight);
     _articleBoxBedIcon = Icon(AppThemePreferences.bedIcon, size: AppThemePreferences.articleBoxIconSize, color: isDark ? AppThemePreferences.articleBoxIconsColorDark : AppThemePreferences.articleBoxIconsColorLight);
     _articleBoxRoomIcon = Icon(AppThemePreferences.roomIcon, size: AppThemePreferences.articleBoxIconSize, color: isDark ? AppThemePreferences.articleBoxIconsColorDark : AppThemePreferences.articleBoxIconsColorLight);
     _articleBoxBathtubIcon = Icon(AppThemePreferences.bathtubIcon, size: AppThemePreferences.articleBoxIconSize, color: isDark ? AppThemePreferences.articleBoxIconsColorDark : AppThemePreferences.articleBoxIconsColorLight);
     _articleBoxAreaSizeIcon = Icon(AppThemePreferences.areaSizeIcon, size: AppThemePreferences.articleBoxIconSize, color: isDark ? AppThemePreferences.articleBoxIconsColorDark : AppThemePreferences.articleBoxIconsColorLight);
-    _filterPageCheckCircleIcon = Icon(AppThemePreferences.checkCircleIcon, size: AppThemePreferences.filterPageCheckCircleIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageLocationIcon = Icon(AppThemePreferences.locationIcon, size: AppThemePreferences.filterPageLocationIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageGpsLocationIcon = Icon(AppThemePreferences.gpsLocationIcon, size: AppThemePreferences.filterPageLocationIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageRadiusLocationIcon = Icon(AppThemePreferences.radiusLocationIcon, size: AppThemePreferences.filterPageLocationIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageArrowForwardIcon = Icon(AppThemePreferences.arrowForwardIcon, size: AppThemePreferences.filterPageArrowForwardIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageLocationCityIcon = Icon(AppThemePreferences.locationCityIcon, size: AppThemePreferences.filterPageLocationCityIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageArrowDropDownIcon = Icon(AppThemePreferences.dropDownArrowIcon, size: AppThemePreferences.filterPageArrowDropDownIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPagePriceTagIcon = Icon(AppThemePreferences.priceTagIcon, size: AppThemePreferences.filterPagePriceTagIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageAreaSizeIcon = Icon(AppThemePreferences.areaSizeIcon, size: AppThemePreferences.filterPageAreaSizeIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageBedroomIcon = Icon(AppThemePreferences.bedIcon, size: AppThemePreferences.filterPageBedroomIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
-    _filterPageBathroomIcon = Icon(AppThemePreferences.bathtubIcon, size: AppThemePreferences.filterPageBathroomIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageCheckCircleIcon = Icon(AppThemePreferences.checkCircleIcon, size: AppThemePreferences.filterPageCheckCircleIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageLocationIcon = Icon(AppThemePreferences.locationIcon, size: AppThemePreferences.filterPageLocationIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageGpsLocationIcon = Icon(AppThemePreferences.gpsLocationIcon, size: AppThemePreferences.filterPageLocationIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageRadiusLocationIcon = Icon(AppThemePreferences.radiusLocationIcon, size: AppThemePreferences.filterPageLocationIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageArrowForwardIcon = Icon(AppThemePreferences.arrowForwardIcon, size: AppThemePreferences.filterPageArrowForwardIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageLocationCityIcon = Icon(AppThemePreferences.locationCityIcon, size: AppThemePreferences.filterPageLocationCityIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageArrowDropDownIcon = Icon(AppThemePreferences.dropDownArrowIcon, size: AppThemePreferences.filterPageArrowDropDownIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPagePriceTagIcon = Icon(AppThemePreferences.priceTagIcon, size: AppThemePreferences.filterPagePriceTagIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageAreaSizeIcon = Icon(AppThemePreferences.areaSizeIcon, size: AppThemePreferences.filterPageAreaSizeIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageBedroomIcon = Icon(AppThemePreferences.bedIcon, size: AppThemePreferences.filterPageBedroomIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
+    // _filterPageBathroomIcon = Icon(AppThemePreferences.bathtubIcon, size: AppThemePreferences.filterPageBathroomIconSize, color: isDark ? AppThemePreferences.filterPageIconsColorDark : AppThemePreferences.filterPageIconsColorLight);
     _bottomNavigationMenuIcon = Icon(AppThemePreferences.doneIcon, size: AppThemePreferences.bottomNavigationMenuIconSize, color: isDark ? AppThemePreferences.appSecondaryColor : AppThemePreferences.appSecondaryColor);
     _propertyDetailsImageIndicatorCameraIcon = Icon(AppThemePreferences.cameraIcon, size: AppThemePreferences.propertyDetailsImageIndicatorCameraIconSize, color: isDark ? AppThemePreferences.propertyDetailsImageIndicatorCameraIconColorDark : AppThemePreferences.propertyDetailsImageIndicatorCameraIconColorLight);
     _agentAgencyVerifiedIcon = Icon(AppThemePreferences.agentAgencyVerificationIcon,  color: AppThemePreferences.agentAgencyVerifiedIconColorDark, size: AppThemePreferences.agentAgencyVerifiedIconSize);
@@ -2502,6 +2581,22 @@ class AppTheme{
   TextStyle? _genericTabBarTextStyle;
   TextStyle? get genericTabBarTextStyle => _genericTabBarTextStyle;
   ///
+  /// Generic Info Card Text Style
+  TextStyle? _genericInfoCardTitleTextStyle;
+  TextStyle? get genericInfoCardTitleTextStyle => _genericInfoCardTitleTextStyle;
+  ///
+  /// Request Permission Text Style
+  TextStyle? _requestPermissionTextStyle;
+  TextStyle? get requestPermissionTextStyle => _requestPermissionTextStyle;
+  ///
+  /// Generic Info Card Highlight TextSyle
+  TextStyle? _genericInfoCardHighlightTextStyle;
+  TextStyle? get genericInfoCardHighlightTextStyle => _genericInfoCardHighlightTextStyle;
+  ///
+  /// Battery Usage Card Title TextStyle
+  TextStyle? _batteryUsageCardTileTextStyle;
+  TextStyle? get batteryUsageCardTileTextStyle => _batteryUsageCardTileTextStyle;
+  ///
   /// Generic StatusBar TextStyle.
   TextStyle? _genericStatusBarTextStyle;
   TextStyle? get genericStatusBarTextStyle => _genericStatusBarTextStyle;
@@ -2626,9 +2721,13 @@ class AppTheme{
   TextStyle? _membershipTitleTextStyle;
   TextStyle? get membershipTitleTextStyle => _membershipTitleTextStyle;
   ///
-  /// Membership Price TextStyle.
+  /// Battery Status TextStyle.
   TextStyle? _batteryStatusHeadingTextStyle;
-  TextStyle? get membershipPriceTextStyle => _batteryStatusHeadingTextStyle;
+  TextStyle? get batteryStatusTextStyle => _batteryStatusHeadingTextStyle;
+  ///
+  /// Battery Status Sub text TextStyle.
+  TextStyle? _batteryStatusSubTextStyle;
+  TextStyle? get batteryStatusSubTextStyle => _batteryStatusSubTextStyle;
   ///
   /// Membership Price TextStyle.
   TextStyle? _membershipPackageNameTextStyle;
@@ -2733,6 +2832,14 @@ class AppTheme{
   Color? _iconsColor;
   Color? get iconsColor => _iconsColor;
   ///
+  /// Generic Info Card Color
+  Color? _genericInfoCardColor;
+  Color? get genericInfoCardColor => _genericInfoCardColor;
+  ///
+  /// Generic Border Color
+  Color? _genericBorderColor;
+  Color? get genericBorderColor => _genericBorderColor;
+  ///
   /// Generic Status Bar color
   Color? _genericStatusBarColor;
   Color? get genericStatusBarColor => _genericStatusBarColor;
@@ -2740,6 +2847,10 @@ class AppTheme{
   /// Generic Status Bar Icons color
   Color? _genericAppBarIconsColor;
   Color? get genericAppBarIconsColor => _genericAppBarIconsColor;
+  ///
+  /// Un Selected Tab Label Color
+  Color? _unselectedTabLabelColor;
+  Color? get unselectedTabLabelColor => _unselectedTabLabelColor;
   ///
   /// HomeScreen Status Bar Color
   Color? _homeScreenStatusBarColor;
@@ -2906,9 +3017,9 @@ class AppTheme{
   Color? _googleSignInButtonColor;
   Color? get googleSignInButtonColor => _googleSignInButtonColor;
   ///
-  /// Apple Sign-In Button Background color
-  Color? _appleSignInButtonColor;
-  Color? get appleSignInButtonColor => _appleSignInButtonColor;
+  /// Circular Gauge Background color
+  Color? _circularGuageBackgroundColor;
+  Color? get circularGuageBackgroundColor => _circularGuageBackgroundColor;
   ///
   /// Filter Page Icons Color?
   Color? _filterPageIconsColor;
@@ -3030,6 +3141,38 @@ class AppTheme{
   ///
   /// Icon:
   ///
+  ///
+  /// Voltage Icon
+  Icon? _voltageIcon;
+  Icon? get voltageIcon => _voltageIcon;
+  ///
+  /// Temprature Icon
+  Icon? _tempratureIcon;
+  Icon? get tempratureIcon => _tempratureIcon;
+  ///
+  /// Battery Health Icon
+  Icon? _healthAndSafeIcon;
+  Icon? get healthAndSafeIcon => _healthAndSafeIcon;
+  ///
+  /// Power Icon
+  Icon? _powerIcon;
+  Icon? get powerIcon => _powerIcon;
+  ///
+  /// Screen Time Icon
+  Icon? _screenTimeIcon;
+  Icon? get screenTimeIcon => _screenTimeIcon;
+  ///
+  /// Back Button ICon
+  Icon? _genericBackButtonIcon;
+  Icon? get genericBackButtonIcon => _genericBackButtonIcon;
+  ///
+  /// Arrow Icon
+  Icon? _requestPermissionIcon;
+  Icon? get requestPermissionIcon => _requestPermissionIcon;
+  ///
+  /// Refresh Icon
+  Icon? _refreshIcon;
+  Icon? get refreshIcon => _refreshIcon;
   ///
   /// Drawer Menu Icon
   Icon? _drawerMenuIcon;
