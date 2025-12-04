@@ -89,12 +89,12 @@ class NotificationFormatSettingsState
                       //     .genericAppBarIconsColor ??
                       // Colors.black,
                       // Colors.white54,
-                      APP_DARK_COLOR,
+                  AppThemePreferences().appTheme.genericInfoCardColor!,
                   width: 1,
                 ),
               ),
               padding: const EdgeInsets.all(8),
-              child: Icon(AppThemePreferences.checkIcon, size: 20),
+              child: AppThemePreferences().appTheme.checkIcon,
             ),
             color: AppThemePreferences().appTheme.genericAppBarIconsColor,
             onPressed: () => onDonePressedFunc(),
@@ -105,12 +105,14 @@ class NotificationFormatSettingsState
         children: [
           NotificationFormatSettingsHeadingWidget(),
           Expanded(
-            child: GenericMultiSelectWidget(
-              selectedDataList: selectedNotifications,
-              dataList: notificationList,
-              listener: (v) {
-                print("Show Selected Notifications: $v");
-              },
+            child: SingleChildScrollView(
+              child: GenericMultiSelectWidget(
+                selectedDataList: selectedNotifications,
+                dataList: notificationList,
+                listener: (v) {
+                  print("Show Selected Notifications: $v");
+                },
+              ),
             ),
           ),
         ],

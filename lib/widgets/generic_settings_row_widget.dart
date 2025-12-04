@@ -65,7 +65,7 @@ class GenericWidgetRow extends StatelessWidget {
                             .copyWith(
                           fontSize: fontSize ??
                               AppThemePreferences.settingOptionsTextFontSize,
-                          color: Colors.white,
+                          // color: Colors.white,
                         ),
                       ),
                     ),
@@ -184,8 +184,7 @@ class HeadingWidget extends StatelessWidget {
       text,
       style: AppThemePreferences()
           .appTheme
-          .settingHeadingTextStyle!
-          .copyWith(color: Colors.white),
+          .settingHeadingTextStyle,
       strutStyle: StrutStyle(height: AppThemePreferences.genericTextHeight),
     );
   }
@@ -207,8 +206,7 @@ class HeadingSubTitleWidget extends StatelessWidget {
         text,
         style: AppThemePreferences()
             .appTheme
-            .settingHeadingSubTitleTextStyle!
-            .copyWith(color: Colors.white),
+            .settingHeadingSubTitleTextStyle,
         strutStyle: StrutStyle(height: AppThemePreferences.genericTextHeight),
       ),
     );

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:app/file/app_preferences/app_preferences.dart';
-import 'package:app/file/common/constants.dart';
+import 'package:app/file/generic_methods/utility_methods.dart';
+import 'package:app/widgets/app_bar_widget.dart';
 import 'package:app/widgets/generic_text_widget.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
@@ -53,10 +54,14 @@ class _InfoScreenState extends State<InfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      top: true,
-
-      child: Padding(
+    return Scaffold(
+      appBar: AppBarWidget(
+        elevation: 0,
+        appBarTitle: UtilityMethods.getLocalizedString("device_info"),
+        automaticallyImplyLeading: false,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      ),
+      body: Padding(
         padding:  EdgeInsets.only(top: 18.0),
         child: ListView.builder(
           padding: const EdgeInsets.all(16),
@@ -72,13 +77,11 @@ class _InfoScreenState extends State<InfoScreen> {
   }
 
   Widget _buildInfoCard(String title, String value) {
-    bool isDark = Theme.of(context).brightness == Brightness.dark;
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        // color: AppThemePreferences().appTheme.containerBackgroundColor,
-        color: APP_DARK_COLOR,
+        color: AppThemePreferences().appTheme.genericInfoCardColor,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
@@ -93,19 +96,11 @@ class _InfoScreenState extends State<InfoScreen> {
         children: [
           GenericTextWidget(
             title,
-            style: TextStyle(
-              fontSize: AppThemePreferences.bodyFontSize,
-              fontWeight: AppThemePreferences.bodyFontWeight,
-              color: isDark ? AppThemePreferences.bodyTextColorDark : AppThemePreferences.bodyTextColorLight,
-            ),
+            style: AppThemePreferences().appTheme.bodyTextStyle
           ),
           GenericTextWidget(
             value,
-            style: TextStyle(
-              fontSize: AppThemePreferences.titleFontSize,
-              fontWeight: AppThemePreferences.titleFontWeight,
-              color: isDark ? AppThemePreferences.titleTextColorDark : AppThemePreferences.titleTextColorLight,
-            ),
+            style: AppThemePreferences().appTheme.titleTextStyle
           ),
         ],
       ),

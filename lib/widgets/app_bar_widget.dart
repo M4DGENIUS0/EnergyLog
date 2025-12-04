@@ -62,17 +62,12 @@ class _AppBarWidgetState extends State<AppBarWidget> {
                   shape: BoxShape.circle,
                   border: Border.all(
                     color:
-                        // AppThemePreferences()
-                        //     .appTheme
-                        //     .genericAppBarIconsColor ??
-                        // Colors.black,
-                    // Colors.white54,
-                    APP_DARK_COLOR,
+                    AppThemePreferences().appTheme.genericInfoCardColor!,
                     width: 1,
                   ),
                 ),
                 padding: const EdgeInsets.all(8),
-                child: Icon(AppThemePreferences.arrowBackIcon, size: 20),
+                child: AppThemePreferences().appTheme.genericBackButtonIcon,
               ),
               color: AppThemePreferences().appTheme.genericAppBarIconsColor,
               onPressed:

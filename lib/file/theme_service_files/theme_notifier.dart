@@ -1,4 +1,5 @@
 import 'package:app/file/common/constants.dart';
+import 'package:app/file/app_preferences/app_preferences.dart';
 import 'package:app/file/hooks_files/hooks_configurations.dart';
 import 'package:app/file/theme_service_files/theme_storage_manager.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ class ThemeNotifier with ChangeNotifier {
       isDarkMode = brightness == Brightness.dark;
     } else if (current == ThemeMode.dark) {
       isDarkMode = true;
-    } else if (current == ThemeMode.light) {
+    } else  {
       isDarkMode = false;
     }
 

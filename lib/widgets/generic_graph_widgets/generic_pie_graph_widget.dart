@@ -53,7 +53,8 @@ class _GenericCircularAnnotatedGraphState extends State<GenericCircularAnnotated
 
             axisLineStyle: AxisLineStyle(
               thickness: 15,
-              color: APP_DARK_COLOR,
+              // color: APP_DARK_COLOR,
+              color: AppThemePreferences().appTheme.circularGuageBackgroundColor,
               // thicknessUnit: GaugeSizeUnit.factor,
               cornerStyle: CornerStyle.bothCurve,
             ),
@@ -75,12 +76,12 @@ class _GenericCircularAnnotatedGraphState extends State<GenericCircularAnnotated
                     children: [
                       GenericTextWidget(
                         '${widget.batteryLevel}%',
-                        style: AppThemePreferences().appTheme.membershipPriceTextStyle,
+                        style: AppThemePreferences().appTheme.batteryStatusTextStyle,
                       ),
                       const SizedBox(height: 10),
-                      const GenericTextWidget(
+                      GenericTextWidget(
                         'Battery status',
-                        style: TextStyle(color: Colors.grey, fontSize: 15),
+                        style: AppThemePreferences().appTheme.batteryStatusSubTextStyle,
                       ),
                       const SizedBox(height: 10),
                       if (widget.isCharging == true)
