@@ -33,15 +33,9 @@ class MainActivity : FlutterActivity() {
         super.configureFlutterEngine(flutterEngine)
 
         // Method Channel for actions
-        io.flutter.plugin.common.MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.energylog.app/battery_actions").setMethodCallHandler { call, result ->
-            if (call.method == "openUsageSettings") {
-                val intent = Intent(android.provider.Settings.ACTION_USAGE_ACCESS_SETTINGS)
-                startActivity(intent)
-                result.success(null)
-            } else {
-                result.notImplemented()
-            }
-        }
+        val powerMonitorChannel = PowerMonitorChannel(this)
+        io.flutter.plugin.common.MethodChannel(flutterEngine.dartExecutor.binaryMessenger, "com.energylog.app/battery_actions")
+            .setMethodCallHandler(powerMonitorChannel)
 
         EventChannel(flutterEngine.dartExecutor.binaryMessenger, BATTERY_CHANNEL).setStreamHandler(
             object : EventChannel.StreamHandler {
