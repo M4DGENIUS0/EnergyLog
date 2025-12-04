@@ -7,6 +7,7 @@ import 'package:app/widgets/generic_text_widget.dart';
 import 'package:app/widgets/notifications_widgets/notification_related_widgets/notification_format.dart';
 import 'package:app/widgets/settings_widget/dark_mode_setting.dart';
 import 'package:app/widgets/settings_widget/language_settings.dart';
+import 'package:app/widgets/settings_widget/web_page.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:app/file/hive_storage_files/hive_storage_manager.dart';
@@ -54,6 +55,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
       top: true,
       child: Center(
         child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -76,7 +78,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               ),
               const SizedBox(height: 10),
               GenericTextWidget(
-                "Version: ${_packageInfo.version}",
+                "version: ${_packageInfo.version}",
                 style: TextStyle(
                   fontSize: AppThemePreferences.bodyFontSize,
                   fontWeight: AppThemePreferences.bodyFontWeight,
@@ -87,7 +89,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               ),
               const SizedBox(height: 5),
               GenericTextWidget(
-                "Build Number: ${_packageInfo.buildNumber}",
+                "build_number: ${_packageInfo.buildNumber}",
                 style: TextStyle(
                   fontSize: AppThemePreferences.subBodyFontSize,
                   fontWeight: AppThemePreferences.subBodyFontWeight,
@@ -104,8 +106,6 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
                     appNotificationCard(),
                     Container(height: 20.0),
                     appThemeCard(),
-                    Container(height: 20.0),
-                    appStanderdCard(),
                     Container(height: 20.0),
                     appStanderdCard(),
                     Container(height: 20.0),
@@ -127,7 +127,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
       ),
-      color: APP_DARK_COLOR,
+      color: AppThemePreferences().appTheme.genericInfoCardColor,
       child: GenericSettingsWidget(
         headingText: UtilityMethods.getLocalizedString("Notifications"),
         headingSubTitleText: UtilityMethods.getLocalizedString(
@@ -199,7 +199,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
       ),
-      color: APP_DARK_COLOR,
+      color: AppThemePreferences().appTheme.genericInfoCardColor,
       child: GenericSettingsWidget(
         enableBottomDecoration: false,
         headingText: UtilityMethods.getLocalizedString("preference"),
@@ -236,7 +236,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
       ),
-      color: APP_DARK_COLOR,
+      color: AppThemePreferences().appTheme.genericInfoCardColor,
       child: GenericSettingsWidget(
         headingText: UtilityMethods.getLocalizedString("standerd"),
         headingSubTitleText: UtilityMethods.getLocalizedString(
@@ -249,9 +249,9 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
           children: [
             GenericWidgetRow(
               // iconData: AppThemePreferences.notificationIcon,
-              iconData: Icons.electric_bolt,
+              iconData: AppThemePreferences.electricBoltIcon,
               text: UtilityMethods.getLocalizedString(
-                "Power Unit (${isWatts ? 'W' : 'mW'})",
+                "power_unit (${isWatts ? 'W' : 'mW'})",
               ),
               switchButtonEnabled: true,
               // switchButtonText: ,
@@ -266,9 +266,9 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
 
             GenericWidgetRow(
               // iconData: AppThemePreferences.notificationIcon,
-              iconData: Icons.thermostat,
+              iconData: AppThemePreferences.temperatureIcon,
               text: UtilityMethods.getLocalizedString(
-                "Temperature Unit (${isCelsius ? '°C' : '°F'})",
+                "temperature_unit (${isCelsius ? '°C' : '°F'})",
               ),
               removeDecoration: true,
               switchButtonEnabled: true,
@@ -292,12 +292,12 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
       shape: AppThemePreferences.roundedCorners(
         AppThemePreferences.globalRoundedCornersRadius,
       ),
-      color: APP_DARK_COLOR,
+      color: AppThemePreferences().appTheme.genericInfoCardColor,
       child: GenericSettingsWidget(
         enableBottomDecoration: false,
         headingText: UtilityMethods.getLocalizedString("about_legal"),
         headingSubTitleText: UtilityMethods.getLocalizedString(
-          "View the privacy policy, terms of service, and version info.",
+          "privacy_policy_description",
         ),
         // headingSubTitleText: AppLocalizations.of(context).customise_your_experience_on_app(appName),
         removeDecoration: true,
@@ -307,49 +307,49 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
           spacing: 10,
           children: [
             GenericWidgetRow(
-              iconData: Icons.privacy_tip,
+              iconData: AppThemePreferences.privacyTipsIcon,
               text: UtilityMethods.getLocalizedString("privacy_policy"),
               removeDecoration: false,
-              onTap: () {},
+              onTap: () => onPrivacyTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: Icons.description,
+              iconData: AppThemePreferences.descriptionOutlined,
               text: UtilityMethods.getLocalizedString("terms_conditions"),
               removeDecoration: false,
-              onTap: () {},
+              onTap: () => onTermsAndConditionsTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: Icons.article,
+              iconData: AppThemePreferences.activitiesIcon,
               text: UtilityMethods.getLocalizedString("license"),
               removeDecoration: false,
-              onTap: () {},
+              onTap: () => onLicenseTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: Icons.bug_report,
+              iconData: AppThemePreferences.bugReportIcon,
               text: UtilityMethods.getLocalizedString("raise_issue"),
               removeDecoration: false,
-              onTap: () {},
+              onTap: () => onReportingBugTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: Icons.lightbulb,
+              iconData: AppThemePreferences.bulbIcon,
               text: UtilityMethods.getLocalizedString("request_a_feature"),
               removeDecoration: false,
-              onTap: () {},
+              onTap: () => onRequestingFeatureTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: Icons.star,
+              iconData: AppThemePreferences.starOutlinedIcon,
               text: UtilityMethods.getLocalizedString("rate_app"),
               removeDecoration: false,
               onTap: () {},
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: Icons.share,
+              iconData: AppThemePreferences.shareIconOutlined,
               text: UtilityMethods.getLocalizedString("share_app"),
               removeDecoration: true,
               onTap: () {},
@@ -374,6 +374,37 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
     );
   }
 
+  void onTermsAndConditionsTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+        context: context,
+        builder: (context) => WebPage(APP_TERMS_URL, UtilityMethods.getLocalizedString("terms_and_conditions")));
+  }
+
+  void onPrivacyTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+        context: context,
+        builder: (context) => WebPage(APP_PRIVACY_URL, UtilityMethods.getLocalizedString("privacy_policy")));
+  }
+
+  void onLicenseTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+        context: context,
+        builder: (context) => WebPage(APP_LICENSE_URL, UtilityMethods.getLocalizedString("license")));
+  }
+
+  void onReportingBugTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+        context: context,
+        builder: (context) => WebPage(APP_PRIVACY_URL, UtilityMethods.getLocalizedString("privacy_policy")));
+  }
+
+  void onRequestingFeatureTap(BuildContext context){
+    UtilityMethods.navigateToRoute(
+        context: context,
+        builder: (context) => WebPage(APP_LICENSE_URL, UtilityMethods.getLocalizedString("license")));
+  }
+
+
   void onLanguageSettingsTap(BuildContext context) {
     UtilityMethods.navigateToRoute(
       context: context,
@@ -381,82 +412,5 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
     );
   }
 
-  void onEditProfileTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) {
-    //
-    //   },
-    // );
-  }
 
-  void onPropertiesTap(BuildContext context) {
-    // isUserLogged
-    //     ? UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => Properties(),
-    // )
-    //     : onLogInTap(context);
-  }
-
-  void onAddPropertyTap(BuildContext context) {
-    // isUserLogged
-    //     ? UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) {
-    //     return UtilityMethods.navigateToAddPropertyPage();
-    //   },
-    //   // builder: (context) => AddPropertyV2(),
-    //   // builder: (context) => AddProperty(),
-    // )
-    // : onLogInTap(context);
-  }
-
-  void onAllUsersTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => AllUsers(),
-    // );
-  }
-
-  void onAllReviewsTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => AllReviews(fromProperty: false,),
-    // );
-  }
-
-  void onInsightsTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => Insights(),
-    // );
-  }
-
-  void onSettingsTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => HomePageSettings(),
-    // );
-  }
-
-  void onRequestDemoTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => ContactDeveloper(),
-    // );
-  }
-
-  onLogInTap(BuildContext context) {
-    // UtilityMethods.navigateToRoute(
-    //   context: context,
-    //   builder: (context) => UserSignIn(
-    //         (String closeOption) {
-    //       if (closeOption == CLOSE) {
-    //         Navigator.pop(context);
-    //       }
-    //     },
-    //   ),
-    // );
-  }
 }
