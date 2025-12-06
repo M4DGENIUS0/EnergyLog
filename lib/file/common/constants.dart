@@ -58,7 +58,8 @@ const String IS_NOTIFICATION_ENABLED_KEY = "notifications_enabled";
 const String CHANGE_TEMPRETURE_UNIT_KEY = "temp_unit_celsius";
 const String CHANGE_POWER_UNIT_KEY = "power_unit_watts";
 const String CHANGE_NOTIFICATION_FORMAT_KEY = "notification_format";
-
+const String PERFORMANCE_HISTORY_KEY = "performance_history";
+const String APP_USAGE_HISTORY_KEY = "app_usage_history";
 
 
 

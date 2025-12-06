@@ -202,6 +202,7 @@ class HiveStorageManager {
   /// Store Notification Formats
   static storeNotificationFormat(List<String> data) {
     saveData(key: CHANGE_NOTIFICATION_FORMAT_KEY, data: data);
+    var verify = readData(key: CHANGE_NOTIFICATION_FORMAT_KEY);
   }
 
   static readNotificationFormat() {
@@ -223,5 +224,37 @@ class HiveStorageManager {
     // deleteRecentSearchesInfo();
     // deleteDefaultCurrencyInfoData();
     deleteScheduleTimeSlotsInfoData();
+  }
+
+
+
+  static Future<void> storePerformanceHistory(
+    List<Map<String, dynamic>> history,
+  ) async {
+    await saveData(key: PERFORMANCE_HISTORY_KEY, data: history);
+  }
+
+  static List<Map<String, dynamic>> readPerformanceHistory() {
+    var data = readData(key: PERFORMANCE_HISTORY_KEY);
+    if (data != null && data is List) {
+      // return data.cast<Map<String, dynamic>>();
+      return data.map((e) => Map<String, dynamic>.from(e)).toList();
+    }
+    return [];
+  }
+
+  static Future<void> storeAppUsageHistory(
+    List<Map<String, dynamic>> history,
+  ) async {
+    await saveData(key: APP_USAGE_HISTORY_KEY, data: history);
+  }
+
+  static List<Map<String, dynamic>> readAppUsageHistory() {
+    var data = readData(key: APP_USAGE_HISTORY_KEY);
+    if (data != null && data is List) {
+      // return data.cast<Map<String, dynamic>>();
+      return data.map((e) => Map<String, dynamic>.from(e)).toList();
+    }
+    return [];
   }
 }
