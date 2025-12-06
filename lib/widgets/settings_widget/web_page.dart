@@ -39,7 +39,7 @@ class _WebPageState extends State<WebPage> {
         centerTitle: true,
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         elevation: 0,
-        appBarTitle: UtilityMethods.getLocalizedString("language_label"),
+        appBarTitle: widget.pageTitle,
         automaticallyImplyLeading: widget.automaticallyImplyLeading ?? true,
       ),
       body: SafeArea(

@@ -104,6 +104,7 @@ class _TaskMonitorScreenState extends State<TaskMonitorScreen> {
     return NoResultErrorWidget(
       headerErrorText: UtilityMethods.getLocalizedString("no_result_found"),
       bodyErrorText: UtilityMethods.getLocalizedString("nothing_found_app_usage"),
+      hideGoBackButton: true,
       // backgroundColor: Theme.of(context).scaffoldBackgroundColor,
     );
   }

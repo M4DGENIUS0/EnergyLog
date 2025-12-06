@@ -6,13 +6,13 @@ import 'package:flutter/material.dart';
 
 void ShowToastWidget({
   required BuildContext buildContext,
-  int toastDuration = 2, // in seconds
+  int toastDuration = 2,
   required String text,
   bool showButton = false,
   String buttonText = 'Button',
   Function()? onButtonPressed,
   SnackBarBehavior behavior = SnackBarBehavior.floating,
-  double bottomNavBarHeight = 80,
+  double bottomNavBarHeight = 50,
 }){
   final snackBar = SnackBar(
     content: SnackBarContentWidget(

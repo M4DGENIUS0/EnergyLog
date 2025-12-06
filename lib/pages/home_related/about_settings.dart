@@ -22,12 +22,12 @@ class AppInfoScreen extends StatefulWidget {
 
 class _AppInfoScreenState extends State<AppInfoScreen> {
   PackageInfo _packageInfo = PackageInfo(
-    appName: 'Unknown',
-    packageName: 'Unknown',
-    version: 'Unknown',
-    buildNumber: 'Unknown',
-    buildSignature: 'Unknown',
-    installerStore: 'Unknown',
+    appName: UNKNOWN,
+    packageName: UNKNOWN,
+    version: UNKNOWN,
+    buildNumber: UNKNOWN,
+    buildSignature: UNKNOWN,
+    installerStore: UNKNOWN,
   );
 
   bool notificationsEnabled =
@@ -78,7 +78,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               ),
               const SizedBox(height: 10),
               GenericTextWidget(
-                "version: ${_packageInfo.version}",
+                "${UtilityMethods.getLocalizedString("version")}: ${_packageInfo.version}",
                 style: TextStyle(
                   fontSize: AppThemePreferences.bodyFontSize,
                   fontWeight: AppThemePreferences.bodyFontWeight,
@@ -89,7 +89,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               ),
               const SizedBox(height: 5),
               GenericTextWidget(
-                "build_number: ${_packageInfo.buildNumber}",
+                "${UtilityMethods.getLocalizedString("build_number")}: ${_packageInfo.buildNumber}",
                 style: TextStyle(
                   fontSize: AppThemePreferences.subBodyFontSize,
                   fontWeight: AppThemePreferences.subBodyFontWeight,
@@ -160,20 +160,17 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
                       });
                       HiveStorageManager.storeNotificationEnabled(true);
                     } else {
-                      // Permission denied, keep switch off
                       setState(() {
                         notificationsEnabled = false;
                       });
                     }
                   } else if (status.isPermanentlyDenied) {
-                    // Open settings if permanently denied
                     openAppSettings();
                     setState(() {
                       notificationsEnabled = false;
                     });
                   }
                 } else {
-                  // User wants to disable notifications
                   setState(() {
                     notificationsEnabled = false;
                   });
@@ -182,7 +179,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
               },
             ),
             GenericWidgetRow(
-              iconData: AppThemePreferences.darkModeIcon,
+              iconData: AppThemePreferences.notificationFormat,
               text: UtilityMethods.getLocalizedString("notification_format"),
               removeDecoration: true,
               onTap: () => onNotificationSettingsTap(context),
@@ -206,7 +203,6 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
         headingSubTitleText: UtilityMethods.getLocalizedString(
           "customise_your_experience_on_app",
         ),
-        // headingSubTitleText: AppLocalizations.of(context).customise_your_experience_on_app(appName),
         removeDecoration: true,
 
         body: Column(
@@ -248,10 +244,9 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
 
           children: [
             GenericWidgetRow(
-              // iconData: AppThemePreferences.notificationIcon,
               iconData: AppThemePreferences.electricBoltIcon,
               text: UtilityMethods.getLocalizedString(
-                "power_unit (${isWatts ? 'W' : 'mW'})",
+                "${UtilityMethods.getLocalizedString("power_unit")} (${isWatts ? 'W' : 'mW'})",
               ),
               switchButtonEnabled: true,
               // switchButtonText: ,
@@ -265,14 +260,12 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
             ),
 
             GenericWidgetRow(
-              // iconData: AppThemePreferences.notificationIcon,
               iconData: AppThemePreferences.temperatureIcon,
               text: UtilityMethods.getLocalizedString(
-                "temperature_unit (${isCelsius ? '°C' : '°F'})",
+                "${UtilityMethods.getLocalizedString("temperature_unit")} (${isCelsius ? '°C' : '°F'})",
               ),
               removeDecoration: true,
               switchButtonEnabled: true,
-              // switchButtonText: ,
               switchButtonValue: isCelsius,
               onTapSwitch: (v) {
                 setState(() {
@@ -299,7 +292,6 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
         headingSubTitleText: UtilityMethods.getLocalizedString(
           "privacy_policy_description",
         ),
-        // headingSubTitleText: AppLocalizations.of(context).customise_your_experience_on_app(appName),
         removeDecoration: true,
 
         body: Column(
@@ -307,14 +299,14 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
           spacing: 10,
           children: [
             GenericWidgetRow(
-              iconData: AppThemePreferences.privacyTipsIcon,
+              iconData: AppThemePreferences.policyIcon,
               text: UtilityMethods.getLocalizedString("privacy_policy"),
               removeDecoration: false,
               onTap: () => onPrivacyTap(context),
             ),
             GenericWidgetRow(
               padding: const EdgeInsets.only(top: 10.0, bottom: 10.0),
-              iconData: AppThemePreferences.descriptionOutlined,
+              iconData: AppThemePreferences.gravelIcon,
               text: UtilityMethods.getLocalizedString("terms_conditions"),
               removeDecoration: false,
               onTap: () => onTermsAndConditionsTap(context),
@@ -377,31 +369,31 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
   void onTermsAndConditionsTap(BuildContext context){
     UtilityMethods.navigateToRoute(
         context: context,
-        builder: (context) => WebPage(APP_TERMS_URL, UtilityMethods.getLocalizedString("terms_and_conditions")));
+        builder: (context) => WebPage(DEMO_URL, UtilityMethods.getLocalizedString("terms_and_conditions")));
   }
 
   void onPrivacyTap(BuildContext context){
     UtilityMethods.navigateToRoute(
         context: context,
-        builder: (context) => WebPage(APP_PRIVACY_URL, UtilityMethods.getLocalizedString("privacy_policy")));
+        builder: (context) => WebPage(DEMO_URL, UtilityMethods.getLocalizedString("privacy_policy")));
   }
 
   void onLicenseTap(BuildContext context){
     UtilityMethods.navigateToRoute(
         context: context,
-        builder: (context) => WebPage(APP_LICENSE_URL, UtilityMethods.getLocalizedString("license")));
+        builder: (context) => WebPage(DEMO_URL, UtilityMethods.getLocalizedString("license")));
   }
 
   void onReportingBugTap(BuildContext context){
     UtilityMethods.navigateToRoute(
         context: context,
-        builder: (context) => WebPage(APP_PRIVACY_URL, UtilityMethods.getLocalizedString("privacy_policy")));
+        builder: (context) => WebPage(DEMO_URL, UtilityMethods.getLocalizedString("raise_issue")));
   }
 
   void onRequestingFeatureTap(BuildContext context){
     UtilityMethods.navigateToRoute(
         context: context,
-        builder: (context) => WebPage(APP_LICENSE_URL, UtilityMethods.getLocalizedString("license")));
+        builder: (context) => WebPage(DEMO_URL, UtilityMethods.getLocalizedString("request_a_feature"),));
   }
 
 

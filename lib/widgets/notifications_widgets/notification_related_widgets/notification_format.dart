@@ -97,7 +97,7 @@ class NotificationFormatSettingsState
               child: AppThemePreferences().appTheme.checkIcon,
             ),
             color: AppThemePreferences().appTheme.genericAppBarIconsColor,
-            onPressed: () => onDonePressedFunc(),
+            onPressed: () => onDonePressedFunc(selectedNotifications),
           ),
         ],
       ),
@@ -111,6 +111,7 @@ class NotificationFormatSettingsState
                 dataList: notificationList,
                 listener: (v) {
                   print("Show Selected Notifications: $v");
+                  selectedNotifications = v;
                 },
               ),
             ),
@@ -120,8 +121,8 @@ class NotificationFormatSettingsState
     );
   }
 
-  onDonePressedFunc() {
-    HiveStorageManager.storeNotificationFormat(selectedNotifications);
+  onDonePressedFunc(List<String> selectedData) {
+    HiveStorageManager.storeNotificationFormat(selectedData);
     _showToast(context, "notification_format_saved");
     Navigator.pop(context);
   }

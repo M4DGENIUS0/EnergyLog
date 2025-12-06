@@ -1,17 +1,12 @@
 import 'dart:async';
 import 'package:app/file/app_preferences/app_preferences.dart';
 import 'package:app/file/generic_methods/utility_methods.dart';
-import 'package:app/file/hive_storage_files/hive_storage_manager.dart';
-import 'package:app/services/notification_service.dart';
+import 'package:app/services/native_channel_service.dart';
+import 'package:app/services/system_monitor_service.dart';
 import 'package:app/widgets/app_bar_widget.dart';
 import 'package:app/widgets/generic_text_widget.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:system_info_plus/system_info_plus.dart';
-import 'package:app/file/common/constants.dart';
-import 'package:app/pages/home_related/history_screen.dart';
 import 'package:app/pages/home_related/task_monitor_screen.dart';
 
 class MonitorScreen extends StatefulWidget {
@@ -21,7 +16,8 @@ class MonitorScreen extends StatefulWidget {
   State<MonitorScreen> createState() => _MonitorScreenState();
 }
 
-class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateMixin{
+class _MonitorScreenState extends State<MonitorScreen>
+    with TickerProviderStateMixin {
   List<FlSpot> ramSpots = [];
   List<FlSpot> cpuSpots = [];
   double _time = 0;
@@ -30,53 +26,31 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
   int _usedMemory = 0;
   TabController? _tabController;
 
-  static const EventChannel _systemChannel = EventChannel(
-    'com.energylog.app/system_stream',
-  );
   StreamSubscription? _systemSubscription;
+  final SystemMonitorService _systemMonitorService = SystemMonitorService();
+  final NativeChannelService _nativeChannelService = NativeChannelService();
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
-    _startListeningToSystemInfo();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      _updateGraph();
-    });
-    // Log history every 5 minutes
-    Timer.periodic(const Duration(minutes: 5), (timer) {
-      _logHistory();
-    });
+    _startSystemMonitoring();
+    _startGraphUpdateTimer();
+    _startPerformanceLoggingTimer();
   }
 
-  void _logHistory() {
-    if (_totalMemory > 0) {
-      var history = HiveStorageManager.readPerformanceHistory();
-      history.add({
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'ram_used': _usedMemory,
-        'ram_total': _totalMemory,
-        'battery_level': 0, // Placeholder, would need battery info here
-      });
-      // Keep last 24 hours (24 * 12 = 288 entries)
-      if (history.length > 288) {
-        history.removeAt(0);
-      }
-      HiveStorageManager.storePerformanceHistory(history);
-    }
-  }
-
-  void _startListeningToSystemInfo() {
-    _systemSubscription = _systemChannel.receiveBroadcastStream().listen(
-      (dynamic event) {
-        if (event is Map) {
-          if (mounted) {
-            setState(() {
-              _totalMemory = (event['total'] as num?)?.toInt() ?? 0;
-              _usedMemory = (event['used'] as num?)?.toInt() ?? 0;
-            });
-            _checkHighUsage();
-          }
+  void _startSystemMonitoring() {
+    _systemSubscription = _nativeChannelService.systemInfoStream.listen(
+          (systemInfo) {
+        if (mounted) {
+          setState(() {
+            _totalMemory = systemInfo.total;
+            _usedMemory = systemInfo.used;
+          });
+          _systemMonitorService.checkAndNotifyHighMemoryUsage(
+            usedMemory: _usedMemory,
+            totalMemory: _totalMemory,
+          );
         }
       },
       onError: (error) {
@@ -85,41 +59,34 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
     );
   }
 
-  void _checkHighUsage() {
+  void _startGraphUpdateTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      _updateGraph();
+    });
+  }
+
+  void _startPerformanceLoggingTimer() {
+    Timer.periodic(const Duration(minutes: 5), (timer) {
+      _logCurrentPerformance();
+    });
+  }
+
+  void _logCurrentPerformance() {
     if (_totalMemory > 0) {
-      double usagePercentage = (_usedMemory / _totalMemory) * 100;
-
-      bool notificationsEnabled =
-          HiveStorageManager.readNotificationEnabled() ?? false;
-
-      var rawFormats = HiveStorageManager.readNotificationFormat();
-      List<String> notificationFormat = [];
-      if (rawFormats is List) {
-        notificationFormat = rawFormats.cast<String>();
-      }
-
-      if (usagePercentage > 90 &&
-          notificationsEnabled &&
-          notificationFormat.contains("high_memory_usage")) {
-        NotificationService().showNotification(
-          "High Memory Usage",
-          "RAM usage is above 90%! (${usagePercentage.toStringAsFixed(1)}%)",
-        );
-      }
+      _systemMonitorService.logPerformanceHistory(
+        ramUsed: _usedMemory,
+        ramTotal: _totalMemory,
+        batteryLevel: 0,
+      );
     }
   }
 
   void _updateGraph() {
-    double ramPercent = _totalMemory > 0
+    final double ramPercent = _totalMemory > 0
         ? (_usedMemory / _totalMemory) * 100
         : 0;
 
-    double cpuPercent = 0;
-    try {
-      cpuPercent = (DateTime.now().millisecond % 100).toDouble();
-    } catch (e) {
-      cpuPercent = 0;
-    }
+    final double cpuPercent = (DateTime.now().millisecond % 100).toDouble();
 
     if (mounted) {
       setState(() {
@@ -138,6 +105,7 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
   void dispose() {
     _timer?.cancel();
     _systemSubscription?.cancel();
+    _tabController?.dispose();
     super.dispose();
   }
 
@@ -156,43 +124,43 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
             indicatorColor: AppThemePreferences().appTheme.primaryColor,
             labelColor: AppThemePreferences().appTheme.primaryColor,
             labelStyle: AppThemePreferences().appTheme.genericTabBarTextStyle,
-            unselectedLabelColor: AppThemePreferences().appTheme.unselectedTabLabelColor,
-            unselectedLabelStyle: AppThemePreferences().appTheme.genericTabBarTextStyle,
-
+            unselectedLabelColor:
+            AppThemePreferences().appTheme.unselectedTabLabelColor,
+            unselectedLabelStyle:
+            AppThemePreferences().appTheme.genericTabBarTextStyle,
             tabs: [
               Tab(
                 child: GenericTextWidget(
                   UtilityMethods.getLocalizedString("system_uasage"),
                 ),
-
               ),
               Tab(
                 child: GenericTextWidget(
                   UtilityMethods.getLocalizedString("app_usage"),
                 ),
               ),
-      
             ],
           ),
         ),
         body: TabBarView(
           controller: _tabController,
-          children: [_buildTabMonitor(), TaskMonitorScreen()],
+          children: [_buildSystemMonitorTab(), const TaskMonitorScreen()],
         ),
       ),
     );
   }
-  Widget _buildTabMonitor() {
+
+  Widget _buildSystemMonitorTab() {
     return SafeArea(
       top: true,
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: .start,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(height: 20),
             _buildMonitorCard(
-              title: "RAM Usage",
+              title: "ram_usage",
               value:
               "${(_usedMemory / 1024 / 1024).toStringAsFixed(0)} MB / ${(_totalMemory / 1024 / 1024).toStringAsFixed(0)} MB",
               spots: ramSpots,
@@ -201,7 +169,7 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
             ),
             const SizedBox(height: 20),
             _buildMonitorCard(
-              title: "CPU Usage (Simulated)",
+              title: "cpu_usage",
               value:
               "${cpuSpots.isNotEmpty ? cpuSpots.last.y.toStringAsFixed(1) : '0'}% / 100%",
               spots: cpuSpots,
@@ -210,27 +178,6 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildHeading(String heading, String description) {
-    return Align(
-      alignment: .centerLeft,
-      child: Column(
-        crossAxisAlignment: .start,
-        mainAxisAlignment: .center,
-        children: [
-          GenericTextWidget(
-            "$heading",
-            strutStyle: const StrutStyle(height: 3.0, forceStrutHeight: true),
-            style: AppThemePreferences().appTheme.sliverUserNameTextStyle,
-          ),
-          GenericTextWidget(
-            description,
-            style: AppThemePreferences().appTheme.sliverGreetingsTextStyle,
-          ),
-        ],
       ),
     );
   }
@@ -288,8 +235,9 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
             height: 200,
             child: LineChart(
               LineChartData(
-                gridData: FlGridData(show: true),
-                titlesData: FlTitlesData(show: false),
+
+                gridData: const FlGridData(show: true),
+                titlesData: const FlTitlesData(show: false),
                 borderData: FlBorderData(
                   show: true,
                   border: Border.all(color: Colors.white10),
@@ -300,12 +248,13 @@ class _MonitorScreenState extends State<MonitorScreen> with TickerProviderStateM
                 maxY: maxY,
                 lineBarsData: [
                   LineChartBarData(
+                    preventCurveOverShooting: true,
                     spots: spots,
                     isCurved: true,
                     color: color,
                     barWidth: 3,
                     isStrokeCapRound: true,
-                    dotData: FlDotData(show: false),
+                    dotData: const FlDotData(show: false),
                     belowBarData: BarAreaData(
                       show: true,
                       color: color.withOpacity(0.2),

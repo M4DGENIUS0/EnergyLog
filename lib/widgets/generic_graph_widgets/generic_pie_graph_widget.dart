@@ -80,7 +80,7 @@ class _GenericCircularAnnotatedGraphState extends State<GenericCircularAnnotated
                       ),
                       const SizedBox(height: 10),
                       GenericTextWidget(
-                        'Battery status',
+                        'battery_status',
                         style: AppThemePreferences().appTheme.batteryStatusSubTextStyle,
                       ),
                       const SizedBox(height: 10),

@@ -31,8 +31,8 @@ class _BatteryScreenState extends State<BatteryScreen> {
   BatteryInfo _batteryInfo = BatteryInfo(
     voltage: 0.0,
     temperature: 0.0,
-    health: "Unknown",
-    technology: "Unknown",
+    health: UNKNOWN,
+    technology: UNKNOWN,
     currentNow: 0,
     power: 0.0,
     chargeCounter: 0,
@@ -40,16 +40,13 @@ class _BatteryScreenState extends State<BatteryScreen> {
     screenTime: -1,
   );
 
-  // StreamSubscription<int>? _batteryLevelSubscription;
   StreamSubscription<BatteryState>? _batteryStateSubscription;
   StreamSubscription<BatteryInfo>? _batteryInfoSubscription;
   Timer? _graphTimer;
 
-  // Graph Data
   List<BarChartGroupData> _hourlyData = [];
   bool _isLoadingGraph = true;
 
-  // App Usage Data
   List<Map<String, dynamic>> _topApps = [];
   bool _isLoadingApps = true;
 
@@ -71,7 +68,6 @@ class _BatteryScreenState extends State<BatteryScreen> {
     _initializeBatteryListeners();
     _loadGraphData();
     _loadTopApps();
-    // Start background logging if not already started
     _nativeChannelService.startLogging(intervalMinutes: 15);
     _graphTimer = Timer.periodic(
       const Duration(minutes: 5),
@@ -92,7 +88,6 @@ class _BatteryScreenState extends State<BatteryScreen> {
       state,
     ) {
       if (mounted) {
-        // Check for charging status change notifications
         if (_batteryState != state) {
           _checkChargingNotifications(state);
         }
@@ -126,10 +121,10 @@ class _BatteryScreenState extends State<BatteryScreen> {
       final Map<int, List<int>> hourlyLevels = {};
 
       for (var entry in entries) {
-        if (entry['timestamp'] != null && entry['battery'] != null) {
-          final timestamp = entry['timestamp'] as int;
-          final batteryMap = entry['battery'] as Map;
-          final level = int.tryParse(batteryMap['level'].toString()) ?? 0;
+        if (entry[TIMESTAMP_KEY] != null && entry[BATTERY_KEY] != null) {
+          final timestamp = entry[TIMESTAMP_KEY] as int;
+          final batteryMap = entry[BATTERY_KEY] as Map;
+          final level = int.tryParse(batteryMap[LEVEL_KEY].toString()) ?? 0;
 
           final date = DateTime.fromMillisecondsSinceEpoch(timestamp);
           final hour = date.hour;
@@ -145,7 +140,6 @@ class _BatteryScreenState extends State<BatteryScreen> {
       for (int i = 0; i <= 23; i++) {
         double value = 0;
         if (hourlyLevels.containsKey(i)) {
-          // Average level for the hour
           final levels = hourlyLevels[i]!;
           value = levels.reduce((a, b) => a + b) / levels.length;
         }
@@ -218,15 +212,15 @@ class _BatteryScreenState extends State<BatteryScreen> {
     if (newState == BatteryState.charging &&
         notificationFormat.contains("charging_started")) {
       NotificationService().showNotification(
-        "Charging Started",
-        "Device is now charging.",
+        UtilityMethods.getLocalizedString("charging_started"),
+        UtilityMethods.getLocalizedString("charging_starts"),
       );
     } else if (_batteryState == BatteryState.charging &&
         newState == BatteryState.discharging &&
         notificationFormat.contains("charging_stopped")) {
       NotificationService().showNotification(
-        "Charging Stopped",
-        "Device is no longer charging.",
+        UtilityMethods.getLocalizedString("charging_stopped"),
+        UtilityMethods.getLocalizedString("charging_stops"),
       );
     }
 
@@ -246,51 +240,45 @@ class _BatteryScreenState extends State<BatteryScreen> {
       notificationFormat = rawFormats.cast<String>();
     }
 
-    // Battery Full
     if (_batteryLevel == 100 &&
         (_batteryState == BatteryState.charging ||
             _batteryState == BatteryState.full) &&
         notificationFormat.contains("battery_full_charged")) {
       NotificationService().showNotification(
-        "Battery Full",
-        "Your battery is fully charged. Unplug to save energy.",
+        UtilityMethods.getLocalizedString("battery_full"),
+        UtilityMethods.getLocalizedString("battery_full_alert"),
       );
     }
 
-    // Low Battery
     if (_batteryLevel <= 20 &&
         _batteryState == BatteryState.discharging &&
         notificationFormat.contains("battery_low_power")) {
       NotificationService().showNotification(
-        "Low Battery",
+        UtilityMethods.getLocalizedString("low_batter"),
         "Battery is low ($_batteryLevel%). Please charge soon.",
       );
     }
 
-    // High Temperature
     if (_batteryInfo.temperature > 45 &&
         notificationFormat.contains("temperature_high_alert")) {
       NotificationService().showNotification(
-        "High Temperature",
+        UtilityMethods.getLocalizedString("temperature_high_alert"),
         "Battery temperature is high (${_batteryInfo.temperature}°C). Cool down your device.",
       );
     }
 
-    // Normal Temperature (Recovery) - simplistic logic, might need state to avoid spam
     if (_batteryInfo.temperature < 40 &&
         notificationFormat.contains("temperature_normal")) {
-      // Logic to ensure we only notify once after being high
     }
 
-    // Charging Limits (Simulated logic as we don't have user settings for limits yet)
     if (_batteryLevel >= 80 &&
         notificationFormat.contains("battery_charging_limit")) {
-      // NotificationService().showNotification("Charging Limit Reached", "Battery reached 80%.");
+      NotificationService().showNotification(UtilityMethods.getLocalizedString("charging_limit_80"), UtilityMethods.getLocalizedString("Battery reached 80%."));
     }
 
     if (_batteryLevel <= 20 &&
         notificationFormat.contains("battery_discharge_limit")) {
-      // NotificationService().showNotification("Discharge Limit Reached", "Battery dropped below 20%.");
+      NotificationService().showNotification(UtilityMethods.getLocalizedString("Discharge Limit Reached"), UtilityMethods.getLocalizedString("Battery dropped below 20%."));
     }
   }
 
@@ -375,7 +363,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
           children: [
             Expanded(
               child: GenericInfoCard(
-                title: "Voltage",
+                title: "voltage",
                 icon: AppThemePreferences().appTheme.voltageIcon!,
                 suffix: "V",
                 value: _batteryInfo.voltage.toStringAsFixed(1),
@@ -384,7 +372,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: GenericInfoCard(
-                title: "Temperature",
+                title: "tempreture",
                 icon: AppThemePreferences().appTheme.tempratureIcon!,
                 suffix: isCelsius ? "°C" : "°F",
                 value: displayTemp.toStringAsFixed(1),
@@ -398,7 +386,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
           children: [
             Expanded(
               child: GenericInfoCard(
-                title: "Health",
+                title: "health",
                 icon: AppThemePreferences().appTheme.healthAndSafeIcon!,
                 suffix: "",
                 value: _batteryInfo.health,
@@ -408,7 +396,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
             const SizedBox(width: 16),
             Expanded(
               child: GenericInfoCard(
-                title: "Power",
+                title: "power",
                 icon: AppThemePreferences().appTheme.powerIcon!,
                 suffix: isWatts ? "W" : "mW",
                 value: displayPower.toStringAsFixed(isWatts ? 2 : 0),
@@ -418,7 +406,6 @@ class _BatteryScreenState extends State<BatteryScreen> {
           ],
         ),
         const SizedBox(height: 16),
-        // Screen Time Card
         GestureDetector(
           onTap: _batteryInfo.screenTime == -1 ? _openUsageSettings : null,
           child: Container(
@@ -438,7 +425,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
                     AppThemePreferences().appTheme.screenTimeIcon!,
                     const SizedBox(width: 6),
                     GenericTextWidget(
-                      "Screen Time (Today)",
+                      "screen_time",
                       style: AppThemePreferences().appTheme.genericInfoCardTitleTextStyle,
                     ),
                   ],
@@ -448,7 +435,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
                     ? Row(
                         children: [
                           GenericTextWidget(
-                            "Grant Permission",
+                            "request_permission",
                             style: AppThemePreferences().appTheme.requestPermissionTextStyle
                           ),
                           const SizedBox(width: 8),
@@ -489,7 +476,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               GenericTextWidget(
-                "Battery Usage (Today)",
+                "battery_usage",
                 style: AppThemePreferences().appTheme.genericInfoCardTitleTextStyle,
               ),
               IconButton(
@@ -505,7 +492,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
                 : _hourlyData.isEmpty
                 ? const Center(
                     child: GenericTextWidget(
-                      "No data available yet",
+                      "no_data_available",
                       style: TextStyle(color: Colors.white54),
                     ),
                   )
@@ -576,7 +563,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GenericTextWidget(
-            "Top Power Consumers",
+            "top_power_consumers",
             style: AppThemePreferences().appTheme.genericInfoCardTitleTextStyle
           ),
           const SizedBox(height: 16),
@@ -587,7 +574,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
                   child: Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: GenericTextWidget(
-                      "No app usage data available.\nMake sure permission is granted.",
+                      "no_app_usage_data",
                       textAlign: TextAlign.center,
                       style:  AppThemePreferences().appTheme.genericInfoCardTitleTextStyle!,
                     ),
@@ -599,7 +586,7 @@ class _BatteryScreenState extends State<BatteryScreen> {
                   itemCount: _topApps.length,
                   itemBuilder: (context, index) {
                     final app = _topApps[index];
-                    final usageTime = app['usageTime'] as int;
+                    final usageTime = app[USAGE_TIME_KEY] as int;
                     final duration = Duration(milliseconds: usageTime);
                     final hours = duration.inHours;
                     final minutes = duration.inMinutes.remainder(60);
@@ -609,18 +596,18 @@ class _BatteryScreenState extends State<BatteryScreen> {
                       leading: CircleAvatar(
                         backgroundColor: APP_PRIMARY_COLOR.withOpacity(0.2),
                         child: Text(
-                          (app['appName'] as String)[0].toUpperCase(),
+                          (app[APP_INFO_APP_NAME] as String)[0].toUpperCase(),
                           style: TextStyle(color: APP_PRIMARY_COLOR),
                         ),
                       ),
                       title: GenericTextWidget(
-                        app['appName'] as String,
+                        app[APP_INFO_APP_NAME] as String,
                         style: AppThemePreferences().appTheme.genericInfoCardHighlightTextStyle!.copyWith(
                             fontSize: 16
                         ),
                       ),
                       subtitle: GenericTextWidget(
-                        app['packageName'] as String,
+                        app[APP_INFO_APP_PACKAGE_NAME] as String,
                         style: AppThemePreferences().appTheme.genericInfoCardTitleTextStyle
                       ),
                       trailing: GenericTextWidget(
