@@ -552,6 +552,7 @@ class AppThemePreferences{
   final double defaultCanvasHeight = 600.0;
   final double defaultCanvasWidth   = 400.0;
   static double closeIconSize = 24.0;
+  static double appIconSize = 150;
   static double warningIconSize = 33.0;
 
   ///
@@ -707,6 +708,7 @@ class AppThemePreferences{
   ///
   ///
   ///
+  static String appIconPath = "assets/icon/icon.png";
   /// Image Sizes:
   ///
   ///
@@ -922,6 +924,7 @@ class AppTheme{
     _closeIcon = Icon(AppThemePreferences.closeIcon, size: AppThemePreferences.closeIconSize, color: isDark ? AppThemePreferences.closeIconColorDark : AppThemePreferences.closeIconColorLight);
     ///
     /// images:
+    _appImagePath = Image.asset(AppThemePreferences.appIconPath, height: AppThemePreferences.appIconSize, width: AppThemePreferences.appIconSize);
     /// images path:
     /// iconData:
     /// border side:
@@ -1263,17 +1266,17 @@ class AppTheme{
   ///
   ///
   /// Image Name
-  // Image? _demoImage;
-  // Image? get demoImage => _demoImage;
+  Image? _appImagePath;
+  Image? get appImagePath => _appImagePath;
 
   ///
   ///
   /// Images Path:
   ///
   ///
-  /// Apple Icon Image Path
-  // String? _demoImagePath;
-  // String? get demoImagePath => _demoImagePath;
+  /// App Icon Image Path
+  // String? _appImagePath;
+  // String? get appImagePath => _appImagePath;
 }
 ///
 ///

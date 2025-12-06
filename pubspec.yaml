@@ -114,6 +114,7 @@ dependencies:
   flutter_svg: ^2.2.3
   permission_handler: ^12.0.1
   app_usage: ^4.0.1
+  flutter_native_splash: ^2.4.7
 
 
 dev_dependencies:
@@ -129,6 +130,15 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+flutter_native_splash:
+  android: true
+  ios: true
+  color: "#222625"
+  image: assets/icon/splash.png
+
+  android_12:
+    color: "#222625"
+    image: assets/icon/splash.png
 
 # The following section is specific to Flutter packages.
 flutter:
@@ -142,6 +152,8 @@ flutter:
   assets:
     - assets/logo.svg
     - assets/localization/
+    - assets/icon/splash.png
+    - assets/icon/icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

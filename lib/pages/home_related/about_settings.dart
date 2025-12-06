@@ -60,11 +60,7 @@ class _AppInfoScreenState extends State<AppInfoScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(height: 100),
-              Icon(
-                Icons.info_outline,
-                size: 80,
-                color: AppThemePreferences().appTheme.primaryColor,
-              ),
+              AppThemePreferences().appTheme.appImagePath!,
               const SizedBox(height: 20),
               GenericTextWidget(
                 _packageInfo.appName,
