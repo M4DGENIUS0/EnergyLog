@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:app/file/common/constants.dart';
+import 'package:app/model/system_info.dart';
 import 'package:app/model/battery_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,9 +9,11 @@ class NativeChannelService {
   static const String _batteryChannelName = 'com.energylog.app/battery_stream';
   static const String _batteryActionsChannelName =
       'com.energylog.app/battery_actions';
+  static const String _systemChannelName = 'com.energylog.app/system_stream';
 
   /// Event Channel Here
   static const EventChannel _batteryChannel = EventChannel(_batteryChannelName);
+  static const EventChannel _systemChannel = EventChannel(_systemChannelName);
 
   /// Method Channel Here
   static const MethodChannel _batteryActionsChannel = MethodChannel(
@@ -24,8 +28,8 @@ class NativeChannelService {
       return BatteryInfo(
         voltage: 0.0,
         temperature: 0.0,
-        health: "Unknown",
-        technology: "Unknown",
+        health: UNKNOWN,
+        technology: UNKNOWN,
         currentNow: 0,
         power: 0.0,
         chargeCounter: 0,
@@ -73,6 +77,29 @@ class NativeChannelService {
     } on PlatformException catch (e) {
       debugPrint("Failed to get today log entries: ${e.message}");
       return [];
+    }
+  }
+
+  Stream<SystemInfo> get systemInfoStream {
+    return _systemChannel.receiveBroadcastStream().map((dynamic event) {
+      if (event is Map) {
+        return SystemInfo.fromMap(event);
+      }
+      return SystemInfo(total: 0, used: 0);
+    });
+  }
+
+  Future<SystemInfo> getCurrentSystemInfo() async {
+    try {
+      final Map<dynamic, dynamic>? result = await _batteryActionsChannel
+          .invokeMethod<Map<dynamic, dynamic>>('getCurrentSystemInfo');
+      if (result != null) {
+        return SystemInfo.fromMap(result);
+      }
+      return SystemInfo(total: 0, used: 0);
+    } on PlatformException catch (e) {
+      debugPrint("Failed to get system info: ${e.message}");
+      return SystemInfo(total: 0, used: 0);
     }
   }
 
