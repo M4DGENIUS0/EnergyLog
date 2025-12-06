@@ -107,6 +107,39 @@ class HooksV2 implements HooksV2Interface {
         "languageCode": "ku"
       };
 
+      Map<String, dynamic> koreaLanguageMap = {
+        "languageName": "Korean",
+        "languageCode": "ko"
+      };
+      Map<String, dynamic> japaneseLanguageMap = {
+        "languageName": "Japanese",
+        "languageCode": "ja"
+      };
+      Map<String, dynamic> mongolianLanguageMap = {
+        "languageName": "Mongol",
+        "languageCode": "mn"
+      };
+      Map<String, dynamic> indonesianLanguageMap = {
+        "languageName": "Indonesian",
+        "languageCode": "id"
+      };
+      Map<String, dynamic> germanLanguageMap = {
+        "languageName": "German",
+        "languageCode": "de"
+      };
+      Map<String, dynamic> chineseLanguageMap = {
+        "languageName": "Chinese",
+        "languageCode": "zh"
+      };
+      Map<String, dynamic> hindiLanguageMap = {
+        "languageName": "Hindi",
+        "languageCode": "hi"
+      };
+      Map<String, dynamic> bangaliLanguageMap = {
+        "languageName": "Bangali",
+        "languageCode": "bn"
+      };
+
       List<dynamic> languageList = [
         englishLanguageMap,
         arabicLanguageMap,
@@ -120,6 +153,14 @@ class HooksV2 implements HooksV2Interface {
         brazilianLanguageMap,
         persianLanguageMap,
         kurdishLanguageMap,
+        koreaLanguageMap,
+        japaneseLanguageMap,
+        mongolianLanguageMap,
+        indonesianLanguageMap,
+        germanLanguageMap,
+        chineseLanguageMap,
+        hindiLanguageMap,
+        bangaliLanguageMap
       ];
 
       return languageList;
